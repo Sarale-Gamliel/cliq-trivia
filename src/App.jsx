@@ -1106,7 +1106,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
       )}
 
       {/* HEADER */}
-      <Header userName={userName} onHome={goHome} showHero={gameState === 'LOBBY' && !session && !isGuest} session={session} isGuest={isGuest} onShowAuth={onShowAuth} onOpenDashboard={() => setShowDashboard(true)} />
+      <Header userName={userName} onHome={goHome} showHero={gameState === 'LOBBY'} session={session} isGuest={isGuest} onShowAuth={onShowAuth} onOpenDashboard={() => setShowDashboard(true)} />
 
       <div className="p-4 md:p-6 lg:p-8">
       {/* MAIN */}

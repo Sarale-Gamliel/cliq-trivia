@@ -197,7 +197,7 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
               </span>
             </button>
 
-            {/* CENTER: Nav links — landing only */}
+            {/* CENTER: Nav links — always in lobby */}
             {showHero && (
               <nav className="hidden md:flex items-center gap-7">
                 {navLinks.map(link => (
@@ -279,8 +279,8 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
         </div>
       </header>
 
-      {/* ══ HERO — zip two-column layout ══ */}
-      {showHero && (
+      {/* ══ HERO — only when not logged in ══ */}
+      {showHero && (!session || isGuest) && (
         <section className="relative overflow-hidden" dir="rtl">
           {/* Soft color wash blobs */}
           <div className="pointer-events-none absolute inset-0 -z-10">

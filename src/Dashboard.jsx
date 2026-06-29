@@ -94,7 +94,9 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ description: aiDesc, count: aiCount }),
       });
-      const data = await res.json();
+      let data;
+      try { data = await res.json(); }
+      catch { throw new Error(`שגיאת שרת (${res.status}) — ייתכן שה-ANTHROPIC_API_KEY לא הוגדר בהגדרות Vercel`); }
       if (!res.ok) throw new Error(data.error || 'שגיאה ביצירה');
       setAiResult(data.questions);
     } catch (err) {
