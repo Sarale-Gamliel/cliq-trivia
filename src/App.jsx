@@ -1125,13 +1125,8 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
             <div className="relative p-6 md:p-8 flex flex-col items-center justify-center min-h-[520px] text-center">
 
               <div className="relative space-y-5 max-w-2xl">
-                {/* Icon */}
-                <div className="inline-flex p-4 rounded-2xl animate-float" style={{ background: '#fce5d8' }}>
-                  <Mic className="h-12 w-12" style={{ color: '#ef9098' }} />
-                </div>
-
                 <h2 className="text-3xl md:text-4xl font-black" style={{ color: '#1e1535' }}>
-                  🎤 מוכנים לטריוויה?
+                  🧠 מוכנים לטריוויה?
                 </h2>
 
                 {playingTopicName ? (
@@ -2039,8 +2034,8 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
             <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-6 md:gap-0">
               {[
                 { num: '1', emoji: '📞', title: 'כולם מחייגים', sub: 'למספר אחד',            bg: '#fce5d8' },
-                { num: '2', emoji: '⌨️', title: 'מקישים 1-4',  sub: 'כל שאלה בזמן אמת',     bg: '#c5d9d2' },
-                { num: '3', emoji: '🏆', title: 'הניקוד עולה', sub: 'מהיר ונכון = יותר נק׳', bg: '#f5c5be' },
+                { num: '2', emoji: '📽️', title: 'מקרינים',      sub: 'על מסך לכל הקהל',      bg: '#c5d9d2' },
+                { num: '3', emoji: '📱', title: 'מתחברים',      sub: 'סורקים QR ומשחקים',    bg: '#f5c5be' },
               ].map((step, i) => (
                 <React.Fragment key={i}>
                   <div className="flex flex-col items-center text-center max-w-[180px]">
@@ -2070,7 +2065,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
           <section className="mt-10 mb-4">
             <div className="text-center mb-6">
               <h2 className="text-2xl font-black mb-1" style={{ color: '#1e1535' }}>שאלות נפוצות</h2>
-              <p className="text-sm" style={{ color: '#6b6580' }}>כל מה שרצית לדעת על CLIQ Trivia</p>
+              <p className="text-sm" style={{ color: '#6b6580' }}>כל מה שרצית לדעת על CLIQ</p>
             </div>
             <div className="max-w-2xl mx-auto space-y-2">
               {[

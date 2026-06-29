@@ -293,12 +293,6 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
 
             {/* RIGHT: copy */}
             <div className="text-center lg:text-right space-y-6">
-              <span className="inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-semibold"
-                style={{ borderColor: 'rgba(239,144,152,0.25)', background: 'rgba(239,144,152,0.08)', color: C.pink }}>
-                <Sparkles className="h-4 w-4" />
-                משחק הטריוויה המשותף
-              </span>
-
               <h1 className="text-5xl font-black leading-tight tracking-tight md:text-7xl" style={{ color: C.dark, letterSpacing: '-0.02em' }}>
                 טריוויה חיה
                 <br />
