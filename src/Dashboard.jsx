@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
 import {
   Sparkles, User, ShoppingBag, Settings, FolderOpen,
-  Plus, Trash2, ArrowRight, Edit2, Check, Loader, LogOut,
+  Plus, Trash2, ArrowRight, Edit2, Check, Loader, LogOut, Wand2, ChevronDown, ChevronUp,
 } from 'lucide-react';
 import QuestionsManager from './QuestionsManager';
 
@@ -45,6 +45,16 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
   const [editingProfile, setEditingProfile] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
 
+  // AI Generator state
+  const [showAI, setShowAI] = useState(false);
+  const [aiDesc, setAiDesc] = useState('');
+  const [aiCount, setAiCount] = useState(20);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiResult, setAiResult] = useState(null);
+  const [aiError, setAiError] = useState('');
+  const [aiSaving, setAiSaving] = useState(false);
+  const [aiExpanded, setAiExpanded] = useState(false);
+
   const isLoggedIn = !!session && !isGuest;
 
   useEffect(() => {
@@ -70,6 +80,51 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
   const deleteTopic = async (id, name) => {
     if (!confirm(`למחוק את הנושא "${name}"?`)) return;
     await supabase.from('topics').delete().eq('id', id);
+    await loadTopics();
+  };
+
+  const generateWithAI = async () => {
+    if (!aiDesc.trim()) return;
+    setAiLoading(true);
+    setAiResult(null);
+    setAiError('');
+    try {
+      const res = await fetch('/api/generate-questions', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ description: aiDesc, count: aiCount }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'שגיאה ביצירה');
+      setAiResult(data.questions);
+    } catch (err) {
+      setAiError(err.message);
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const saveAIQuestions = async () => {
+    if (!aiResult?.length) return;
+    setAiSaving(true);
+    const topicName = aiDesc.trim().slice(0, 60);
+    const { data: topicData, error: topicErr } = await supabase
+      .from('topics').insert([{ name: topicName }]).select().single();
+    if (topicErr || !topicData) { setAiError('שגיאה ביצירת נושא'); setAiSaving(false); return; }
+    const rows = aiResult.map(q => ({
+      topic_id: topicData.id,
+      question_text: q.question,
+      answer_1: q.answer_1,
+      answer_2: q.answer_2,
+      answer_3: q.answer_3,
+      answer_4: q.answer_4,
+      correct_index: q.correct_index,
+    }));
+    await supabase.from('questions').insert(rows);
+    setShowAI(false);
+    setAiDesc('');
+    setAiResult(null);
+    setAiSaving(false);
     await loadTopics();
   };
 
@@ -239,6 +294,124 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
                     ))}
                   </div>
                 )}
+
+                {/* ── AI Generator ── */}
+                <div className="mt-6 rounded-2xl overflow-hidden"
+                  style={{ border: '1.5px solid rgba(139,92,246,0.25)', background: 'linear-gradient(135deg, rgba(139,92,246,0.05), rgba(239,144,152,0.05))' }}>
+                  <button
+                    onClick={() => { setShowAI(v => !v); setAiResult(null); setAiError(''); }}
+                    className="w-full flex items-center justify-between px-5 py-4 transition hover:opacity-80">
+                    <div className="flex items-center gap-2">
+                      <Wand2 className="h-5 w-5" style={{ color: '#7c3aed' }} />
+                      <span className="font-black text-sm" style={{ color: '#7c3aed' }}>✨ צור שאלות עם AI</span>
+                      <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{ background: 'rgba(139,92,246,0.12)', color: '#7c3aed' }}>חדש</span>
+                    </div>
+                    {showAI ? <ChevronUp className="h-4 w-4" style={{ color: '#7c3aed' }} /> : <ChevronDown className="h-4 w-4" style={{ color: '#7c3aed' }} />}
+                  </button>
+
+                  {showAI && (
+                    <div className="px-5 pb-5 space-y-4">
+                      <p className="text-xs" style={{ color: C.mid }}>
+                        תאר את האירוע / נושא — ה-AI יצור {aiCount} שאלות מגוונות תוך שניות
+                      </p>
+
+                      <textarea
+                        value={aiDesc}
+                        onChange={e => setAiDesc(e.target.value)}
+                        placeholder="לדוגמה: יום הולדת 30 לאבי שאוהב כדורגל וסדרות נטפליקס"
+                        rows={3}
+                        className="w-full rounded-xl px-4 py-3 text-sm resize-none transition focus:outline-none"
+                        style={{ background: '#fdf8f6', border: `1.5px solid rgba(139,92,246,0.25)`, color: C.dark }}
+                        onFocus={e => e.target.style.borderColor = '#7c3aed'}
+                        onBlur={e => e.target.style.borderColor = 'rgba(139,92,246,0.25)'}
+                      />
+
+                      {/* Count selector */}
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs font-bold" style={{ color: C.mid }}>כמות שאלות:</span>
+                        {[10, 15, 20, 30].map(n => (
+                          <button key={n} onClick={() => setAiCount(n)}
+                            className="px-3 py-1 rounded-lg text-sm font-black transition"
+                            style={{
+                              background: aiCount === n ? '#7c3aed' : 'rgba(139,92,246,0.1)',
+                              color: aiCount === n ? 'white' : '#7c3aed',
+                            }}>
+                            {n}
+                          </button>
+                        ))}
+                      </div>
+
+                      {aiError && (
+                        <div className="text-xs text-red-500 bg-red-50 rounded-xl px-4 py-3">❌ {aiError}</div>
+                      )}
+
+                      {!aiResult && (
+                        <button
+                          onClick={generateWithAI}
+                          disabled={aiLoading || !aiDesc.trim()}
+                          className="w-full flex items-center justify-center gap-2 font-black py-3 rounded-xl text-white transition hover:scale-[1.01] disabled:opacity-50"
+                          style={{ background: 'linear-gradient(135deg, #7c3aed, #a855f7)', boxShadow: '0 4px 16px rgba(124,58,237,0.3)' }}>
+                          {aiLoading ? <><Loader className="h-4 w-4 animate-spin" /> יוצר שאלות...</> : <><Wand2 className="h-4 w-4" /> צור {aiCount} שאלות</>}
+                        </button>
+                      )}
+
+                      {aiResult && (
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-black" style={{ color: '#7c3aed' }}>✅ {aiResult.length} שאלות נוצרו!</span>
+                            <button onClick={() => { setAiResult(null); setAiError(''); }}
+                              className="text-xs font-bold px-3 py-1 rounded-lg"
+                              style={{ background: 'rgba(139,92,246,0.1)', color: '#7c3aed' }}>
+                              נסה שוב
+                            </button>
+                          </div>
+
+                          {/* Preview */}
+                          <div className="rounded-xl overflow-hidden" style={{ border: '1px solid rgba(139,92,246,0.15)' }}>
+                            <button
+                              onClick={() => setAiExpanded(v => !v)}
+                              className="w-full flex items-center justify-between px-4 py-2.5 text-xs font-bold"
+                              style={{ background: 'rgba(139,92,246,0.06)', color: '#7c3aed' }}>
+                              <span>תצוגה מקדימה</span>
+                              {aiExpanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+                            </button>
+                            {aiExpanded && (
+                              <div className="max-h-64 overflow-y-auto divide-y divide-purple-100">
+                                {aiResult.map((q, i) => (
+                                  <div key={i} className="px-4 py-2.5">
+                                    <div className="text-xs font-bold mb-1" style={{ color: C.dark }}>
+                                      {i + 1}. {q.question}
+                                      <span className="mr-2 text-[10px] px-1.5 py-0.5 rounded-full"
+                                        style={{ background: q.difficulty === 'easy' ? '#d1fae5' : q.difficulty === 'hard' ? '#fee2e2' : '#fef3c7', color: q.difficulty === 'easy' ? '#065f46' : q.difficulty === 'hard' ? '#991b1b' : '#92400e' }}>
+                                        {q.difficulty === 'easy' ? 'קל' : q.difficulty === 'hard' ? 'קשה' : 'בינוני'}
+                                      </span>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-1">
+                                      {[q.answer_1, q.answer_2, q.answer_3, q.answer_4].map((a, j) => (
+                                        <span key={j} className={`text-[10px] px-2 py-0.5 rounded-lg ${q.correct_index === j + 1 ? 'font-black' : ''}`}
+                                          style={{ background: q.correct_index === j + 1 ? '#d1fae5' : 'rgba(239,144,152,0.06)', color: q.correct_index === j + 1 ? '#065f46' : C.mid }}>
+                                          {j + 1}. {a}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+
+                          <button
+                            onClick={saveAIQuestions}
+                            disabled={aiSaving}
+                            className="w-full flex items-center justify-center gap-2 font-black py-3 rounded-xl text-white transition hover:scale-[1.01] disabled:opacity-50"
+                            style={{ background: 'linear-gradient(135deg, #059669, #10b981)', boxShadow: '0 4px 16px rgba(16,185,129,0.3)' }}>
+                            {aiSaving ? <><Loader className="h-4 w-4 animate-spin" /> שומר...</> : <><Check className="h-4 w-4" /> שמור כנושא חדש</>}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             )
           )}
