@@ -66,6 +66,7 @@ export default function PlayerApp() {
   const [timeLeft, setTimeLeft]     = useState(15);
   const [playersCount, setPlayersCount] = useState(0);
   const [allPlayers, setAllPlayers] = useState([]);
+  const [topAnswerers, setTopAnswerers] = useState(null);
   const [error, setError]           = useState('');
   const [loading, setLoading]       = useState(false);
 
@@ -118,6 +119,7 @@ export default function PlayerApp() {
       setAnsweredAt(null);
       setWasCorrect(null);
       setPointsGained(0);
+      setTopAnswerers(null);
       setPhase('question');
 
       clearInterval(timerRef.current);
@@ -139,6 +141,7 @@ export default function PlayerApp() {
       const myAns = myAnswerRef.current;
       const isCorrect = myAns !== null && myAns === correct;
       setWasCorrect(isCorrect);
+      setTopAnswerers(room.current_question.top_answerers || null);
 
       // Calculate points
       let pts = 0;
@@ -448,6 +451,25 @@ export default function PlayerApp() {
               </div>
             </div>
           </div>
+
+          {/* Top 3 fastest correct answerers */}
+          {topAnswerers && topAnswerers.length > 0 && (
+            <div className="w-full max-w-sm rounded-2xl overflow-hidden border border-amber-500/30"
+              style={{ background: 'linear-gradient(135deg, rgba(251,191,36,0.08), rgba(245,158,11,0.04))' }}>
+              <div className="px-4 pt-3 pb-1 text-center">
+                <span className="text-xs font-black text-amber-300 tracking-wider">⚡ הכי מהירים בסיבוב</span>
+              </div>
+              {topAnswerers.map((p, i) => (
+                <div key={i} className="flex items-center gap-3 px-4 py-2.5 border-t border-white/5">
+                  <span className="text-xl w-7 text-center">{['🥇','🥈','🥉'][i]}</span>
+                  <span className="flex-1 font-bold text-white text-sm">{p.name}</span>
+                  {p.time != null && (
+                    <span className="text-xs text-amber-300 font-bold">{(p.time / 1000).toFixed(1)}ש׳</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 

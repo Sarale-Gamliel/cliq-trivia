@@ -364,10 +364,8 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
               </div>
 
               <div className="space-y-3">
-                {[
-                  { key: 'timeLimit',        label: 'כמות הזמן לענות תשובה', suffix: 'שניות', min: 5,  max: 120, step: 5 },
-                  { key: 'leaderboardEvery', label: 'הצגת המובילים כל',        suffix: 'שאלות', min: 1,  max: 20,  step: 1 },
-                ].map(({ key, label, suffix, min, max, step }) => (
+                {/* Time limit slider */}
+                {[{ key: 'timeLimit', label: 'כמות הזמן לענות תשובה', suffix: 'שניות', min: 5, max: 120, step: 5 }].map(({ key, label, suffix, min, max, step }) => (
                   <div key={key}
                     className="flex items-center justify-between gap-4 py-2.5 px-4 rounded-xl"
                     style={{ background: 'rgba(255,255,255,0.7)', border: `1px solid rgba(239,144,152,0.15)` }}>
@@ -391,6 +389,34 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
                     </span>
                   </div>
                 ))}
+
+                {/* Leaderboard mode */}
+                <div className="py-3 px-4 rounded-xl"
+                  style={{ background: 'rgba(255,255,255,0.7)', border: `1px solid rgba(239,144,152,0.15)` }}>
+                  <div className="text-sm text-right mb-3 font-bold" style={{ color: C.dark }}>⚡ הצגת המהירים בסיבוב לשחקנים</div>
+                  <div className="flex flex-wrap gap-2 justify-end">
+                    {[
+                      { value: 'always',   label: 'כל שאלה' },
+                      { value: 'every3',   label: 'כל 3 שאלות' },
+                      { value: 'every5',   label: 'כל 5 שאלות' },
+                      { value: 'end_only', label: 'רק בסוף' },
+                      { value: 'never',    label: 'בכלל לא' },
+                    ].map(opt => (
+                      <button
+                        key={opt.value}
+                        onClick={() => onSettingsChange({ ...settings, leaderboardMode: opt.value })}
+                        className="px-3 py-1.5 rounded-lg text-sm font-bold transition-all"
+                        style={{
+                          background: (settings.leaderboardMode || 'always') === opt.value ? C.pink : 'rgba(239,144,152,0.15)',
+                          color: (settings.leaderboardMode || 'always') === opt.value ? 'white' : C.dark,
+                          border: `1px solid ${(settings.leaderboardMode || 'always') === opt.value ? C.pink : 'transparent'}`,
+                        }}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           )}

@@ -97,7 +97,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
     timeLimit: 15,
     autoAdvance: false,
     autoReveal: true,
-    leaderboardEvery: 5,
+    leaderboardMode: 'always',
     autoShowWinners: true,
     autoStartTimer: true,
     endOnAllVoted: true,
@@ -107,6 +107,8 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
   });
   const gameSettingsRef = useRef(null);
   gameSettingsRef.current = gameSettings;
+  const playersRef = useRef(players);
+  playersRef.current = players;
 
   const [roomCode] = useState(() => Math.random().toString(36).slice(2, 6).toUpperCase());
 
@@ -499,6 +501,25 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
     setSuspenseActive(true);
     playSuspenseSound();
 
+    // Compute top 3 fastest correct answerers
+    const mode = gameSettingsRef.current.leaderboardMode || 'always';
+    const qIdx = currentQuestionIdx;
+    const total = activeQuestions.length;
+    const showBoard = mode === 'always' ? true
+      : mode === 'every3' ? (qIdx + 1) % 3 === 0
+      : mode === 'every5' ? (qIdx + 1) % 5 === 0
+      : mode === 'never' ? false
+      : mode === 'end_only' ? qIdx === total - 1
+      : true;
+
+    const top3 = showBoard
+      ? playersRef.current
+          .filter(p => p.isConnected && p.isCorrect)
+          .sort((a, b) => (a.lastAnswerTime || 99999) - (b.lastAnswerTime || 99999))
+          .slice(0, 3)
+          .map(p => ({ name: p.name, time: p.lastAnswerTime }))
+      : null;
+
     // Broadcast reveal with correct answer to real players
     const q = activeQuestions[currentQuestionIdx];
     if (q) {
@@ -511,6 +532,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
           correct: q.correctIndex ?? q.correct ?? 0,
           time_limit: gameSettingsRef.current.timeLimit,
           started_at: new Date(questionStartTimeRef.current).toISOString(),
+          top_answerers: top3,
         },
       });
     }
