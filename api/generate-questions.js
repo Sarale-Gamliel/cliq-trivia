@@ -8,8 +8,8 @@ export default async function handler(req, res) {
   const { description, count = 20 } = req.body || {};
   if (!description?.trim()) return res.status(400).json({ error: 'Description required' });
 
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) return res.status(500).json({ error: 'GEMINI_API_KEY not configured in Vercel environment' });
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) return res.status(500).json({ error: 'GROQ_API_KEY not configured in Vercel environment' });
 
   const prompt = `אתה מומחה ליצירת שאלות טריוויה בעברית מגוונות ומעניינות.
 
@@ -40,26 +40,28 @@ export default async function handler(req, res) {
 - JSON תקין בלבד, בלי הסברים`;
 
   try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.7, maxOutputTokens: 8192 },
-        }),
-      }
-    );
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7,
+        max_tokens: 8192,
+      }),
+    });
 
     if (!response.ok) {
       const err = await response.text();
-      console.error('Gemini API error:', err);
+      console.error('Groq API error:', err);
       return res.status(502).json({ error: 'AI service error', details: err });
     }
 
     const data = await response.json();
-    const text = (data.candidates?.[0]?.content?.parts?.[0]?.text || '').trim();
+    const text = (data.choices?.[0]?.message?.content || '').trim();
 
     const start = text.indexOf('[');
     const end = text.lastIndexOf(']') + 1;

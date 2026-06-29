@@ -144,25 +144,25 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
         }
       } catch (sErr) { console.warn('serverless failed:', sErr); /* fall through */ }
 
-      // 2️⃣ Fall back to direct browser call via Gemini (uses VITE_GEMINI_API_KEY)
-      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+      // 2️⃣ Fall back to direct browser call via Groq (uses VITE_GROQ_API_KEY)
+      const apiKey = import.meta.env.VITE_GROQ_API_KEY;
       if (!apiKey) throw new Error(
         'שגיאה בשרת — נסי שוב מאוחר יותר או פני לתמיכה'
       );
 
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-        {
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
+          'authorization': `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.7, maxOutputTokens: 8192 },
+          model: 'llama-3.3-70b-versatile',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.7,
+          max_tokens: 8192,
         }),
-        }
-      );
+      });
 
       if (!res.ok) {
         const errText = await res.text();
@@ -170,7 +170,7 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
       }
 
       const data = await res.json();
-      setAiResult(parseQuestions(data.candidates?.[0]?.content?.parts?.[0]?.text || ''));
+      setAiResult(parseQuestions(data.choices?.[0]?.message?.content || ''));
     } catch (err) {
       setAiError(err.message);
     } finally {
