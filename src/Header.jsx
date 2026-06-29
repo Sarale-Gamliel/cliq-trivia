@@ -215,41 +215,33 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
             {/* LEFT: Actions */}
             <div className="flex items-center gap-2 shrink-0">
 
-              {/* כניסת מנחה — always visible, goes to dashboard */}
-              <button onClick={onOpenDashboard}
-                className="inline-flex items-center gap-1.5 rounded-full text-sm font-semibold text-white px-5 py-2 transition-transform hover:scale-[1.03]"
-                style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)`, boxShadow: '0 4px 14px rgba(239,144,152,0.3)' }}>
-                <UserCircle className="h-4 w-4" />
-                כניסת מנחה
-              </button>
+              {/* כניסת מנחה / שם — always one button; hover shows logout when logged in */}
+              <div className="relative group/host">
+                <button onClick={onOpenDashboard}
+                  className="inline-flex items-center gap-1.5 rounded-full text-sm font-semibold text-white px-5 py-2 transition-transform hover:scale-[1.03]"
+                  style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)`, boxShadow: '0 4px 14px rgba(239,144,152,0.3)' }}>
+                  <UserCircle className="h-4 w-4" />
+                  {session && !isGuest && userName ? userName : 'כניסת מנחה'}
+                </button>
 
-              {/* When fully logged in: user dropdown for logout */}
-              {session && !isGuest && (
-                <div className="relative group/user">
-                  <button title={userName}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-full transition-all text-sm font-bold border"
-                    style={{ color: C.dark, borderColor: 'rgba(239,144,152,0.2)', background: 'rgba(239,144,152,0.06)' }}
-                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(239,144,152,0.12)'}
-                    onMouseLeave={e => e.currentTarget.style.background = 'rgba(239,144,152,0.06)'}>
-                    <UserCircle className="h-4 w-4" style={{ color: C.pink }} />
-                    {userName && <span className="hidden md:block text-xs">{userName}</span>}
-                  </button>
-                  <div className="absolute top-full mt-2 left-0 bg-white border rounded-2xl p-4 opacity-0 group-hover/user:opacity-100 pointer-events-none group-hover/user:pointer-events-auto transition-all z-50 min-w-[170px] shadow-xl"
+                {session && !isGuest && (
+                  <div className="absolute top-full mt-2 left-0 bg-white border rounded-2xl overflow-hidden opacity-0 group-hover/host:opacity-100 pointer-events-none group-hover/host:pointer-events-auto transition-all z-50 min-w-[180px] shadow-xl"
                     style={{ borderColor: '#f0ebe8', boxShadow: '0 16px 40px rgba(239,144,152,0.18)' }}>
-                    <div className="flex items-center gap-3 mb-3 pb-3" style={{ borderBottom: '1px solid #f0ebe8' }}>
-                      <UserCircle className="h-7 w-7 shrink-0" style={{ color: C.pink }} />
-                      <div className="text-sm font-bold" style={{ color: C.dark }}>{userName}</div>
+                    <div className="px-4 py-3 text-sm font-black text-center" style={{ color: C.dark, background: 'rgba(239,144,152,0.07)', borderBottom: '1px solid #f0ebe8' }}>
+                      היי {userName} 👋
                     </div>
-                    <button onClick={() => supabase.auth.signOut()}
-                      className="w-full flex items-center justify-center gap-2 font-bold py-2 rounded-xl text-xs transition"
-                      style={{ background: '#fff5f5', color: '#dc2626', border: '1px solid #fca5a5' }}
-                      onMouseEnter={e => e.currentTarget.style.background = '#fee2e2'}
-                      onMouseLeave={e => e.currentTarget.style.background = '#fff5f5'}>
-                      <LogOut className="h-4 w-4" /> התנתקות
-                    </button>
+                    <div className="p-2">
+                      <button onClick={() => supabase.auth.signOut()}
+                        className="w-full flex items-center justify-center gap-2 font-bold py-2 rounded-xl text-xs transition"
+                        style={{ background: '#fff5f5', color: '#dc2626', border: '1px solid #fca5a5' }}
+                        onMouseEnter={e => e.currentTarget.style.background = '#fee2e2'}
+                        onMouseLeave={e => e.currentTarget.style.background = '#fff5f5'}>
+                        <LogOut className="h-4 w-4" /> התנתקות
+                      </button>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
 
               {/* Mobile menu toggle (landing) */}
               {showHero && (

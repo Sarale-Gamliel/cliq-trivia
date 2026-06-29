@@ -1949,7 +1949,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                     <div className="grid grid-cols-4 gap-2">
                       {[1, 2, 3, 4].map(num => {
                         const isSelected = p.lastAnswer === num;
-                        const disabled = !p.isConnected || p.isBot || gameState !== 'QUESTION' || p.isEliminated;
+                        const disabled = !p.isConnected || gameState !== 'QUESTION' || p.isEliminated;
                         return (
                           <button
                             key={num}
