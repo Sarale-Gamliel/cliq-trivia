@@ -41,6 +41,9 @@ function Footer() {
           </a>
         </div>
       </div>
+      <div className="text-center text-xs mt-2" style={{ color: '#6b6580' }}>
+        © {new Date().getFullYear()} כל הזכויות שמורות לשרהלה גמליאל
+      </div>
     </footer>
   );
 }
