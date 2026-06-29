@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, UserCircle, LogOut, Phone, Send, X, Menu } from 'lucide-react';
+import { Sparkles, UserCircle, LogOut, Phone, Send, X, Menu, Star } from 'lucide-react';
 import { supabase } from './supabaseClient';
 
 const PHONE_NUMBER = "077-333-8748";
@@ -275,7 +275,7 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                   {link.label}
                 </a>
               ))}
-              {!isLoggedIn && (
+              {!(session && !isGuest) && (
                 <button onClick={() => { onShowAuth(); setMobileOpen(false); }}
                   className="rounded-2xl px-4 py-3 text-sm font-semibold text-right transition"
                   style={{ color: C.pink }}>
