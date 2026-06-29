@@ -89,11 +89,18 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
     setAiResult(null);
     setAiError('');
 
-    const prompt = `אתה מומחה ליצירת שאלות טריוויה בעברית מגוונות ומעניינות.
+    const prompt = `אתה מומחה ליצירת שאלות טריוויה בעברית מגוונות ומעניינות לאירועים ומשחקים חברתיים.
 
 המנחה ביקש: "${aiDesc.trim()}"
 
-צור בדיוק ${aiCount} שאלות טריוויה הקשורות לנושא זה, מגוונות ברמת הקושי.
+הוראות חשובות:
+- הבן לעומק את הכוונה של המנחה — הנושא, הסגנון, האווירה וקהל היעד
+- אם ביקשו "מביכות" — צור שאלות אישיות ומביכות שמגרות שיחה
+- אם ביקשו נושא ספציפי כמו "חתונה", "בת מצווה", "עבודה" — התמקד בדיוק בנושא
+- אם ביקשו על אדם ספציפי — צור שאלות שמתאימות לאותו אדם (תחביבים, אישיות, זיכרונות)
+- השאלות יהיו מהנות, מגוונות ומתאימות לאירוע שתואר
+
+צור בדיוק ${aiCount} שאלות, מגוונות ברמת הקושי.
 
 החזר JSON תקין בלבד, ללא שום טקסט לפני או אחרי, במבנה המדויק:
 [
@@ -114,7 +121,6 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
 - correct_index הוא 1, 2, 3, או 4
 - difficulty הוא "easy", "medium", או "hard"
 - גוון בין רמות קושי
-- שאלות מעניינות ולא משעממות
 - JSON תקין בלבד, בלי הסברים`;
 
     const parseQuestions = (text) => {
@@ -166,6 +172,7 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
 
       if (!res.ok) {
         const errText = await res.text();
+        if (res.status === 429) throw new Error('הגעת ללימיט — המתיני 10 שניות ונסי שוב');
         throw new Error(`שגיאת AI (${res.status}): ${errText.slice(0, 120)}`);
       }
 
