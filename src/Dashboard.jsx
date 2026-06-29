@@ -134,52 +134,22 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
     };
 
     try {
-      // 1️⃣ Try serverless function first (uses ANTHROPIC_API_KEY server-side)
-      try {
-        const serverRes = await fetch('/api/generate-questions', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ description: aiDesc, count: aiCount }),
-        });
-        const ct = serverRes.headers.get('content-type') || '';
-        if (ct.includes('application/json')) {
-          const data = await serverRes.json();
-          if (data?.questions?.length) {
-            setAiResult(data.questions);
-            return;
-          }
-          if (data?.error) throw new Error(`שגיאת שרת: ${data.error}`);
-        }
-      } catch (sErr) { console.warn('serverless failed:', sErr); /* fall through */ }
-
-      // 2️⃣ Fall back to direct browser call via Groq (uses VITE_GROQ_API_KEY)
-      const apiKey = import.meta.env.VITE_GROQ_API_KEY;
-      if (!apiKey) throw new Error(
-        'שגיאה בשרת — נסי שוב מאוחר יותר או פני לתמיכה'
-      );
-
-      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      const serverRes = await fetch('/api/generate-questions', {
         method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          'authorization': `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model: 'llama-3.3-70b-versatile',
-          messages: [{ role: 'user', content: prompt }],
-          temperature: 0.7,
-          max_tokens: 8192,
-        }),
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ description: aiDesc, count: aiCount }),
       });
-
-      if (!res.ok) {
-        const errText = await res.text();
-        if (res.status === 429) throw new Error('הגעת ללימיט — המתיני 10 שניות ונסי שוב');
-        throw new Error(`שגיאת AI (${res.status}): ${errText.slice(0, 120)}`);
+      const ct = serverRes.headers.get('content-type') || '';
+      if (!ct.includes('application/json')) throw new Error('שגיאת שרת — נסי שוב');
+      const data = await serverRes.json();
+      if (data?.questions?.length) {
+        setAiResult(data.questions);
+        return;
       }
-
-      const data = await res.json();
-      setAiResult(parseQuestions(data.choices?.[0]?.message?.content || ''));
+      if (data?.error?.includes('429') || serverRes.status === 429) {
+        throw new Error('הגעת ללימיט — המתיני 10 שניות ונסי שוב');
+      }
+      throw new Error(data?.error || 'שגיאת שרת — נסי שוב');
     } catch (err) {
       setAiError(err.message);
     } finally {
