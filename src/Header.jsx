@@ -199,20 +199,18 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
               </button>
             </div>
 
-            {/* CENTER: Nav links */}
-            {showHero && (
-              <nav className="hidden md:flex items-center gap-7">
-                {navLinks.map(link => (
-                  <a key={link.href} href={link.href}
-                    className="text-sm font-medium transition-colors hover:opacity-80"
-                    style={{ color: C.mid }}
-                    onMouseEnter={e => e.currentTarget.style.color = C.pink}
-                    onMouseLeave={e => e.currentTarget.style.color = C.mid}>
-                    {link.label}
-                  </a>
-                ))}
-              </nav>
-            )}
+            {/* CENTER: Nav links — always visible */}
+            <nav className="hidden md:flex items-center gap-7">
+              {navLinks.map(link => (
+                <a key={link.href} href={link.href}
+                  className="text-sm font-medium transition-colors hover:opacity-80"
+                  style={{ color: C.mid }}
+                  onMouseEnter={e => e.currentTarget.style.color = C.pink}
+                  onMouseLeave={e => e.currentTarget.style.color = C.mid}>
+                  {link.label}
+                </a>
+              ))}
+            </nav>
 
             {/* LEFT: Actions — flex-1 justify-end mirrors the logo side */}
             <div className="flex-1 flex items-center justify-end gap-2">
