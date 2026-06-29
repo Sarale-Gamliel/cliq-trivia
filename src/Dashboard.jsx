@@ -133,17 +133,16 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ description: aiDesc, count: aiCount }),
         });
-        if (serverRes.ok) {
-          const ct = serverRes.headers.get('content-type') || '';
-          if (ct.includes('application/json')) {
-            const data = await serverRes.json();
-            if (data?.questions?.length) {
-              setAiResult(data.questions);
-              return;
-            }
+        const ct = serverRes.headers.get('content-type') || '';
+        if (ct.includes('application/json')) {
+          const data = await serverRes.json();
+          if (data?.questions?.length) {
+            setAiResult(data.questions);
+            return;
           }
+          if (data?.error) throw new Error(`שגיאת שרת: ${data.error}`);
         }
-      } catch { /* serverless unavailable — fall through */ }
+      } catch (sErr) { console.warn('serverless failed:', sErr); /* fall through */ }
 
       // 2️⃣ Fall back to direct browser call via Gemini (uses VITE_GEMINI_API_KEY)
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
@@ -152,7 +151,7 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
       );
 
       const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
         {
         method: 'POST',
         headers: {
