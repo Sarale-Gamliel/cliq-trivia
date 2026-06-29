@@ -88,17 +88,91 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
     setAiLoading(true);
     setAiResult(null);
     setAiError('');
+
+    const prompt = `אתה מומחה ליצירת שאלות טריוויה בעברית מגוונות ומעניינות.
+
+המנחה ביקש: "${aiDesc.trim()}"
+
+צור בדיוק ${aiCount} שאלות טריוויה הקשורות לנושא זה, מגוונות ברמת הקושי.
+
+החזר JSON תקין בלבד, ללא שום טקסט לפני או אחרי, במבנה המדויק:
+[
+  {
+    "question": "מה השאלה?",
+    "answer_1": "תשובה א",
+    "answer_2": "תשובה ב",
+    "answer_3": "תשובה ג",
+    "answer_4": "תשובה ד",
+    "correct_index": 1,
+    "category": "קטגוריה",
+    "difficulty": "easy"
+  }
+]
+
+כללים:
+- כל השאלות והתשובות בעברית
+- correct_index הוא 1, 2, 3, או 4
+- difficulty הוא "easy", "medium", או "hard"
+- גוון בין רמות קושי
+- שאלות מעניינות ולא משעממות
+- JSON תקין בלבד, בלי הסברים`;
+
+    const parseQuestions = (text) => {
+      const t = text.trim();
+      const start = t.indexOf('[');
+      const end = t.lastIndexOf(']') + 1;
+      if (start === -1 || end === 0) throw new Error('AI החזיר פורמט לא תקין');
+      return JSON.parse(t.slice(start, end));
+    };
+
     try {
-      const res = await fetch('/api/generate-questions', {
+      // 1️⃣ Try serverless function first (uses ANTHROPIC_API_KEY server-side)
+      try {
+        const serverRes = await fetch('/api/generate-questions', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ description: aiDesc, count: aiCount }),
+        });
+        if (serverRes.ok) {
+          const ct = serverRes.headers.get('content-type') || '';
+          if (ct.includes('application/json')) {
+            const data = await serverRes.json();
+            if (data?.questions?.length) {
+              setAiResult(data.questions);
+              return;
+            }
+          }
+        }
+      } catch { /* serverless unavailable — fall through */ }
+
+      // 2️⃣ Fall back to direct browser call (uses VITE_ANTHROPIC_API_KEY)
+      const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY;
+      if (!apiKey) throw new Error(
+        'יש להגדיר ANTHROPIC_API_KEY בהגדרות Vercel (Settings → Environment Variables)'
+      );
+
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ description: aiDesc, count: aiCount }),
+        headers: {
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'content-type': 'application/json',
+          'anthropic-dangerous-direct-browser-access': 'true',
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 8192,
+          messages: [{ role: 'user', content: prompt }],
+        }),
       });
-      let data;
-      try { data = await res.json(); }
-      catch { throw new Error(`שגיאת שרת (${res.status}) — ייתכן שה-ANTHROPIC_API_KEY לא הוגדר בהגדרות Vercel`); }
-      if (!res.ok) throw new Error(data.error || 'שגיאה ביצירה');
-      setAiResult(data.questions);
+
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`שגיאת AI (${res.status}): ${errText.slice(0, 120)}`);
+      }
+
+      const data = await res.json();
+      setAiResult(parseQuestions(data.content?.[0]?.text || ''));
     } catch (err) {
       setAiError(err.message);
     } finally {
@@ -138,7 +212,13 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
   };
 
   if (openTopic) {
-    return <QuestionsManager topic={openTopic} onClose={() => setOpenTopic(null)} />;
+    return (
+      <QuestionsManager
+        topic={openTopic}
+        onClose={() => setOpenTopic(null)}
+        onShowAI={() => { setOpenTopic(null); setShowAI(true); }}
+      />
+    );
   }
 
   const displayName = isLoggedIn ? (userForm.first_name || session?.user?.email?.split('@')[0] || '') : 'אורח';

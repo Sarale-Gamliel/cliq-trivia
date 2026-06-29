@@ -8,8 +8,8 @@ export default async function handler(req, res) {
   const { description, count = 20 } = req.body || {};
   if (!description?.trim()) return res.status(400).json({ error: 'Description required' });
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) return res.status(500).json({ error: 'ANTHROPIC_API_KEY not configured in Vercel environment' });
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) return res.status(500).json({ error: 'GEMINI_API_KEY not configured in Vercel environment' });
 
   const prompt = `אתה מומחה ליצירת שאלות טריוויה בעברית מגוונות ומעניינות.
 
@@ -40,28 +40,26 @@ export default async function handler(req, res) {
 - JSON תקין בלבד, בלי הסברים`;
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 8192,
-        messages: [{ role: 'user', content: prompt }],
-      }),
-    });
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.7, maxOutputTokens: 8192 },
+        }),
+      }
+    );
 
     if (!response.ok) {
       const err = await response.text();
-      console.error('Anthropic API error:', err);
+      console.error('Gemini API error:', err);
       return res.status(502).json({ error: 'AI service error', details: err });
     }
 
     const data = await response.json();
-    const text = (data.content?.[0]?.text || '').trim();
+    const text = (data.candidates?.[0]?.content?.parts?.[0]?.text || '').trim();
 
     const start = text.indexOf('[');
     const end = text.lastIndexOf(']') + 1;

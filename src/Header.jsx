@@ -177,7 +177,7 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
       {/* ══ NAVBAR — floating pill (zip design) ══ */}
       <header className="sticky top-0 z-50 w-full" dir="rtl">
         <div className="max-w-7xl mx-auto px-4 pt-3 pb-2">
-          <div className="flex items-center justify-between gap-4 px-5 py-3"
+          <div className="flex items-center gap-4 px-5 py-3"
             style={{
               borderRadius: '9999px',
               border: '1px solid rgba(239,144,152,0.25)',
@@ -186,18 +186,20 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
               boxShadow: '0 2px 16px rgba(239,144,152,0.12)',
             }}>
 
-            {/* RIGHT: Logo */}
-            <button onClick={onHome} className="flex items-center gap-2 shrink-0 group">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl shadow-sm"
-                style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)` }}>
-                <Sparkles className="h-5 w-5 text-white" />
-              </span>
-              <span className="text-2xl font-black group-hover:opacity-80 transition-opacity" style={{ letterSpacing: '-0.05em', color: C.dark }}>
-                CL<span style={{ color: C.pink }}>I</span>Q
-              </span>
-            </button>
+            {/* RIGHT: Logo — flex-1 so center nav stays perfectly centered */}
+            <div className="flex-1 flex items-center">
+              <button onClick={onHome} className="flex items-center gap-2 group">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl shadow-sm"
+                  style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)` }}>
+                  <Sparkles className="h-5 w-5 text-white" />
+                </span>
+                <span className="text-2xl font-black group-hover:opacity-80 transition-opacity" style={{ letterSpacing: '-0.05em', color: C.dark }}>
+                  CL<span style={{ color: C.pink }}>I</span>Q
+                </span>
+              </button>
+            </div>
 
-            {/* CENTER: Nav links — always in lobby */}
+            {/* CENTER: Nav links */}
             {showHero && (
               <nav className="hidden md:flex items-center gap-7">
                 {navLinks.map(link => (
@@ -212,8 +214,8 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
               </nav>
             )}
 
-            {/* LEFT: Actions */}
-            <div className="flex items-center gap-2 shrink-0">
+            {/* LEFT: Actions — flex-1 justify-end mirrors the logo side */}
+            <div className="flex-1 flex items-center justify-end gap-2">
 
               {/* כניסת מנחה / שם — always one button; hover shows logout when logged in */}
               <div className="relative group/host">
@@ -279,8 +281,8 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
         </div>
       </header>
 
-      {/* ══ HERO — only when not logged in ══ */}
-      {showHero && (!session || isGuest) && (
+      {/* ══ HERO ══ */}
+      {showHero && (
         <section className="relative overflow-hidden" dir="rtl">
           {/* Soft color wash blobs */}
           <div className="pointer-events-none absolute inset-0 -z-10">
