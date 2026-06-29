@@ -145,26 +145,25 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
         }
       } catch { /* serverless unavailable — fall through */ }
 
-      // 2️⃣ Fall back to direct browser call (uses VITE_ANTHROPIC_API_KEY)
-      const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY;
+      // 2️⃣ Fall back to direct browser call via Gemini (uses VITE_GEMINI_API_KEY)
+      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
       if (!apiKey) throw new Error(
-        'יש להגדיר ANTHROPIC_API_KEY בהגדרות Vercel (Settings → Environment Variables)'
+        'שגיאה בשרת — נסי שוב מאוחר יותר או פני לתמיכה'
       );
 
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+        {
         method: 'POST',
         headers: {
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
           'content-type': 'application/json',
-          'anthropic-dangerous-direct-browser-access': 'true',
         },
         body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
-          max_tokens: 8192,
-          messages: [{ role: 'user', content: prompt }],
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.7, maxOutputTokens: 8192 },
         }),
-      });
+        }
+      );
 
       if (!res.ok) {
         const errText = await res.text();
@@ -172,7 +171,7 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
       }
 
       const data = await res.json();
-      setAiResult(parseQuestions(data.content?.[0]?.text || ''));
+      setAiResult(parseQuestions(data.candidates?.[0]?.content?.parts?.[0]?.text || ''));
     } catch (err) {
       setAiError(err.message);
     } finally {
