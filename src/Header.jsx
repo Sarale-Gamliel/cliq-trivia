@@ -294,15 +294,13 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
             {/* RIGHT: copy */}
             <div className="text-center space-y-6">
               <h1 className="text-5xl font-black leading-tight tracking-tight md:text-7xl" style={{ color: C.dark, letterSpacing: '-0.02em' }}>
-                טריוויה חיה
+                חוויה בלתי נשכחת
                 <br />
                 <span style={{ color: C.pink }}>לכל אירוע</span>
               </h1>
 
               <p className="mx-auto max-w-md text-lg leading-relaxed lg:mx-0" style={{ color: C.mid }}>
-                כולם מחייגים למספר אחד ומקישים{' '}
-                <strong style={{ color: C.dark }}>1–4</strong> — בלי אפליקציה, בלי הורדות.
-                חוויה משותפת שמרימה כל אירוע.
+                נכנסים בחיוג קצר, עונים בלייב, צוברים נקודות וחוויות.
               </p>
 
               <div className="flex flex-col items-center gap-3 sm:flex-row justify-center">
