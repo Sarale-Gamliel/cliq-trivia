@@ -46,27 +46,27 @@ function BookingModal({ onClose }) {
           <div className="flex-1" style={{ background: C.pinkLight }} />
           <div className="flex-1" style={{ background: C.pink }} />
         </div>
-        <div className="p-7">
-          <button onClick={onClose} className="absolute top-5 left-5 p-1.5 rounded-xl hover:bg-rose-50 transition" style={{ color: C.mid }}>
+        <div className="p-5">
+          <button onClick={onClose} className="absolute top-4 left-4 p-1.5 rounded-xl hover:bg-rose-50 transition" style={{ color: C.mid }}>
             <X className="h-4 w-4" />
           </button>
-          <div className="text-center mb-6">
-            <div className="inline-flex p-3.5 rounded-2xl mb-3" style={{ background: C.peach }}>
-              <Star className="h-8 w-8" style={{ color: C.pink }} />
+          <div className="text-center mb-4">
+            <div className="inline-flex p-2.5 rounded-2xl mb-2" style={{ background: C.peach }}>
+              <Star className="h-6 w-6" style={{ color: C.pink }} />
             </div>
-            <h2 className="text-2xl font-black" style={{ color: C.dark }}>טריוויה לאירוע שלכם! 🎉</h2>
-            <p className="text-sm mt-1 leading-relaxed" style={{ color: C.mid }}>נבנה ביחד חוויה בלתי נשכחת</p>
+            <h2 className="text-xl font-black" style={{ color: C.dark }}>טריוויה לאירוע שלכם! 🎉</h2>
+            <p className="text-xs mt-0.5" style={{ color: C.mid }}>נבנה ביחד חוויה בלתי נשכחת</p>
           </div>
-          <form onSubmit={handleSubmit} className="space-y-3">
+          <form onSubmit={handleSubmit} className="space-y-2">
             {fields.map(field => (
               <div key={field.key}>
-                <label className="block text-xs font-bold mb-1.5" style={{ color: C.mid }}>{field.label}</label>
+                <label className="block text-xs font-bold mb-1" style={{ color: C.mid }}>{field.label}</label>
                 <input
                   type={field.type}
                   placeholder={field.placeholder}
                   value={form[field.key]}
                   onChange={e => setForm(prev => ({ ...prev, [field.key]: e.target.value }))}
-                  className="w-full rounded-xl px-4 py-2.5 text-sm transition focus:outline-none"
+                  className="w-full rounded-xl px-3 py-2 text-sm transition focus:outline-none"
                   style={{ background: '#fdf8f6', border: `1.5px solid ${C.pinkLight}`, color: C.dark }}
                   onFocus={e => e.target.style.borderColor = C.pink}
                   onBlur={e => e.target.style.borderColor = C.pinkLight}
@@ -74,13 +74,13 @@ function BookingModal({ onClose }) {
               </div>
             ))}
             <button type="submit"
-              className="relative w-full overflow-hidden text-white font-black py-3.5 rounded-xl transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 shadow-lg mt-2"
+              className="relative w-full overflow-hidden text-white font-black py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 shadow-lg mt-1"
               style={{ background: 'linear-gradient(135deg, #10b981, #059669)', boxShadow: '0 8px 20px rgba(16,185,129,0.3)' }}>
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer pointer-events-none" />
               <Send className="h-4 w-4 relative" />
               <span className="relative">שלחו פנייה בוואטסאפ 💬</span>
             </button>
-            <div className="flex items-center justify-center gap-2 pt-1">
+            <div className="flex items-center justify-center gap-2">
               <a href={`https://wa.me/${WA_NUMBER}`} target="_blank" rel="noopener noreferrer"
                 className="text-xs flex items-center gap-1 transition" style={{ color: '#10b981' }}>
                 <Phone className="h-3 w-3" /> 055-989-6806
