@@ -291,12 +291,7 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
 
           <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 py-8 md:py-12 lg:grid-cols-2">
 
-            {/* RIGHT: Phone mockup */}
-            <div className="hidden lg:flex items-center justify-center order-first">
-              <PhoneVisual />
-            </div>
-
-            {/* LEFT: copy */}
+            {/* RIGHT: copy */}
             <div className="text-center lg:text-right space-y-5">
               <h1 className="text-5xl font-black leading-tight tracking-tight md:text-7xl" style={{ color: C.dark, letterSpacing: '-0.02em' }}>
                 חוויה בלתי נשכחת
@@ -308,7 +303,7 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                 נכנסים בחיוג קצר, עונים בלייב, צוברים נקודות וחוויות.
               </p>
 
-              <div className="flex flex-col items-center gap-3 sm:flex-row lg:justify-end justify-center">
+              <div className="flex flex-col items-center gap-3 sm:flex-row lg:justify-start justify-center">
                 <a href={`https://wa.me/${WA_NUMBER}`} target="_blank" rel="noopener noreferrer"
                   className="relative overflow-hidden inline-flex items-center gap-2 rounded-full font-black px-7 py-4 text-white w-full sm:w-auto justify-center transition-transform hover:scale-[1.03]"
                   style={{ background: 'linear-gradient(135deg, #10b981, #059669)', boxShadow: '0 12px 28px rgba(16,185,129,0.3)' }}>
@@ -323,7 +318,7 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                 </button>
               </div>
 
-              <div className="flex flex-wrap justify-center lg:justify-end gap-2">
+              <div className="flex flex-wrap justify-center lg:justify-start gap-2">
                 {[
                   { label: 'חתונות',        bg: C.peach },
                   { label: 'בר / בת מצווה', bg: C.mint },
@@ -336,6 +331,11 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                   </span>
                 ))}
               </div>
+            </div>
+
+            {/* LEFT: Phone mockup */}
+            <div className="hidden lg:flex items-center justify-center">
+              <PhoneVisual />
             </div>
 
           </div>
