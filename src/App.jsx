@@ -344,10 +344,12 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
   };
 
   const startQuestion = (questionIdx) => {
-    // Feature 5: Determine joker question (20% chance)
-    const joker = Math.random() < 0.2;
+    // Joker: off by default — set manually via gameSettings.jokerActive
+    const joker = gameSettingsRef.current.jokerActive === true;
     setIsJokerQuestion(joker);
     isJokerRef.current = joker;
+    // Reset after use
+    if (joker) setGameSettings(s => ({ ...s, jokerActive: false }));
 
     // Feature 6: Determine lightning round (every 6th question: idx 5,11,17...)
     const lightning = questionIdx % 6 === 5;
@@ -1242,14 +1244,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
           {gameState === 'QUESTION' && (
             <div className="relative p-6 md:p-8 flex flex-col min-h-[600px]">
 
-              {/* Feature 6: Lightning round header */}
-              {isLightningRound && (
-                <div className="absolute top-0 inset-x-0 bg-gradient-to-r from-yellow-500/20 via-amber-500/30 to-yellow-500/20 border-b border-amber-400/40 px-6 py-2 flex items-center justify-center gap-3">
-                  <Zap className="h-5 w-5 text-amber-400 animate-pulse" />
-                  <span className="text-amber-300 font-black text-sm">⚡ בזק — ראשון מנצח!</span>
-                  <Zap className="h-5 w-5 text-amber-400 animate-pulse" />
-                </div>
-              )}
+              {/* Lightning round: subtle indicator only */}
 
               {/* Header with progress */}
               <div className={`relative flex justify-between items-center mb-4 ${isLightningRound ? 'mt-8' : ''}`}>
@@ -1380,18 +1375,10 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                           {answerers.map(a => (
                             <span
                               key={a.id}
-                              className="answer-chip text-xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1"
-                              style={{ background: 'rgba(255,255,255,0.9)', color: '#1e1535', border: '1px solid rgba(239,144,152,0.2)' }}
+                              className="answer-chip text-xs px-2.5 py-1 rounded-full font-bold"
+                              style={{ background: pal.accent, color: pal.num }}
                             >
-                              {a.isBot ? <Bot className="h-3 w-3" style={{ color: '#3d7a6e' }} /> : <User className="h-3 w-3" style={{ color: '#ef9098' }} />}
-                              {a.name}
-                              {a.streak >= 2 && (
-                                <span className="flex items-center gap-0.5 font-black" style={{ color: '#c07030' }}>
-                                  <Flame className="h-3 w-3" />
-                                  {a.streak}
-                                </span>
-                              )}
-                            </span>
+                              ●
                           ))}
                         </div>
                       )}
@@ -1578,11 +1565,6 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
               )}
 
               <div className="relative text-center mb-6 flex items-center justify-center gap-3">
-                <span className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 px-4 py-1.5 rounded-full text-xs font-bold">
-                  <Check className="h-4 w-4" />
-                  התשובה הנכונה נחשפת!
-                </span>
-                {/* Feature 9: category icon in reveal */}
                 <span className="text-xl">{categoryIcon}</span>
               </div>
 
