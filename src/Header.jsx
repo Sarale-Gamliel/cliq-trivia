@@ -95,66 +95,83 @@ function BookingModal({ onClose }) {
 
 /* ─── Phone mockup — zip style with pink border + white card interior ─── */
 function PhoneVisual() {
+  const answers = [
+    { n: '1', label: 'בדוויזר', bg: C.pink,      glow: 'rgba(239,144,152,0.6)' },
+    { n: '2', label: 'היינקן',  bg: C.mint,      glow: 'rgba(197,217,210,0.6)' },
+    { n: '3', label: 'קורונה',  bg: C.pinkLight, glow: 'rgba(245,197,190,0.6)' },
+    { n: '4', label: 'גינס',    bg: C.peach,     glow: 'rgba(252,229,216,0.6)' },
+  ];
   return (
-    <div className="relative mx-auto w-full max-w-xs select-none pointer-events-none">
+    <div className="relative mx-auto w-full max-w-sm select-none pointer-events-none">
       {/* Floating badges */}
-      <div className="absolute -top-2 -right-6 z-10 text-white text-[11px] font-black px-3 py-1.5 rounded-full shadow-lg animate-float"
-        style={{ background: '#10b981', animationDelay: '0.3s' }}>
+      <div className="absolute -top-3 -right-4 z-10 text-white text-[11px] font-black px-3 py-1.5 rounded-full shadow-lg animate-float"
+        style={{ background: '#10b981', animationDelay: '0.3s', boxShadow: '0 4px 12px rgba(16,185,129,0.4)' }}>
         ✓ נכון!
       </div>
-      <div className="absolute -bottom-4 -left-6 z-10 text-white text-[11px] font-black px-3 py-1.5 rounded-full shadow-lg animate-float"
-        style={{ background: C.pink, animationDelay: '0.9s' }}>
+      <div className="absolute -bottom-3 -left-4 z-10 text-white text-[11px] font-black px-3 py-1.5 rounded-full shadow-lg animate-float"
+        style={{ background: C.pink, animationDelay: '0.9s', boxShadow: '0 4px 12px rgba(239,144,152,0.4)' }}>
         +750 נק׳
       </div>
 
-      {/* Phone body — pink border like zip */}
-      <div className="relative rounded-[2.6rem] p-2 shadow-2xl"
-        style={{ background: C.pink, border: `8px solid ${C.pink}`, boxShadow: `0 30px 60px rgba(239,144,152,0.35)` }}>
+      {/* Screen frame */}
+      <div className="relative rounded-3xl overflow-hidden shadow-2xl"
+        style={{ background: C.dark, border: `3px solid rgba(239,144,152,0.3)`, boxShadow: `0 30px 60px rgba(30,21,53,0.5), 0 0 40px rgba(239,144,152,0.15)` }}>
 
-        {/* White card interior */}
-        <div className="overflow-hidden rounded-[2.1rem] bg-white">
-          {/* Status bar */}
-          <div className="flex items-center justify-between px-5 py-3.5" style={{ borderBottom: `1px solid rgba(239,144,152,0.15)` }}>
-            <span className="flex items-center gap-1.5 text-xs font-black" style={{ color: C.pink }}>
-              <span className="h-2 w-2 rounded-full animate-pulse" style={{ background: C.pink }} />
-              LIVE
-            </span>
-            <span className="text-lg font-black" style={{ color: C.dark, letterSpacing: '-0.05em' }}>
-              CL<span style={{ color: C.pink }}>I</span>Q
-            </span>
+        {/* Top bar */}
+        <div className="flex items-center justify-between px-4 py-3" style={{ background: 'rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+          <span className="flex items-center gap-1.5 text-[11px] font-black text-white/60">
+            שאלה 3 / 10
+          </span>
+          <span className="text-base font-black" style={{ color: C.pink, letterSpacing: '-0.05em' }}>
+            CL<span className="text-white">I</span>Q
+          </span>
+          <span className="flex items-center gap-1 text-[11px] font-black" style={{ color: '#10b981' }}>
+            <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: '#10b981' }} />
+            LIVE
+          </span>
+        </div>
+
+        {/* Timer */}
+        <div className="flex justify-center pt-4 pb-2">
+          <div className="relative h-14 w-14 flex items-center justify-center rounded-full"
+            style={{ background: 'rgba(239,144,152,0.12)', border: `2px solid ${C.pink}`, boxShadow: `0 0 16px rgba(239,144,152,0.3)` }}>
+            <span className="text-2xl font-black" style={{ color: C.pink }}>7</span>
           </div>
+        </div>
 
-          {/* Question area */}
-          <div className="px-5 py-5">
-            <p className="text-center text-[11px] font-medium mb-3" style={{ color: C.mid }}>שאלה 3 מתוך 10</p>
-            <h3 className="text-center font-black text-base leading-snug mb-5" style={{ color: C.dark }}>
-              מה הבירה הכי נמכרת בעולם?
-            </h3>
-
-            <div className="grid grid-cols-2 gap-2.5">
-              {[
-                { n: '1', label: 'בדוויזר', bg: '#ef4444' },
-                { n: '2', label: 'היינקן',  bg: '#3b82f6' },
-                { n: '3', label: 'קורונה',  bg: '#f59e0b' },
-                { n: '4', label: 'גינס',    bg: '#10b981' },
-              ].map(a => (
-                <div key={a.n} className="flex flex-col items-center gap-1 rounded-2xl px-2 py-3 text-white shadow-sm" style={{ background: a.bg }}>
-                  <span className="text-2xl font-black">{a.n}</span>
-                  <span className="text-[11px] font-semibold">{a.label}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-4 flex items-center justify-between rounded-2xl px-4 py-3" style={{ background: '#f9f5f4' }}>
-              <span className="text-sm font-semibold" style={{ color: C.dark }}>חייגו 4–1</span>
-              <span className="text-lg font-black" style={{ color: C.pink }}>+750 נק׳</span>
-            </div>
+        {/* Question */}
+        <div className="px-4 pb-3">
+          <div className="rounded-2xl px-4 py-3 text-center" style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <p className="font-black text-sm leading-snug text-white">מה הבירה הכי נמכרת בעולם?</p>
           </div>
+        </div>
+
+        {/* Answer buttons */}
+        <div className="grid grid-cols-2 gap-2.5 px-4 pb-4">
+          {answers.map(a => (
+            <div key={a.n} className="rounded-2xl px-3 py-3 flex items-center gap-2.5"
+              style={{ background: 'rgba(255,255,255,0.06)', border: `1.5px solid ${a.bg}`, boxShadow: `0 0 12px ${a.glow}` }}>
+              <span className="h-7 w-7 rounded-xl flex items-center justify-center text-sm font-black shrink-0 text-white"
+                style={{ background: a.bg }}>
+                {a.n}
+              </span>
+              <span className="text-xs font-bold text-white">{a.label}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Player dots */}
+        <div className="flex justify-center gap-1.5 pb-3">
+          {[C.pink, C.mint, C.pinkLight, '#10b981', C.peach, C.pink].map((c, i) => (
+            <div key={i} className="h-2 w-2 rounded-full" style={{ background: c, opacity: 0.8 }} />
+          ))}
+          <span className="text-white/40 text-[10px] mr-1">44 מחייגים</span>
         </div>
       </div>
 
-      {/* Accent blob behind phone */}
-      <div className="absolute -bottom-6 -left-6 -z-10 h-28 w-28 rounded-full blur-2xl" style={{ background: C.mint, opacity: 0.5 }} />
+      {/* Glow behind */}
+      <div className="absolute -bottom-6 -left-6 -z-10 h-32 w-32 rounded-full blur-3xl" style={{ background: C.pink, opacity: 0.3 }} />
+      <div className="absolute -top-6 -right-6 -z-10 h-32 w-32 rounded-full blur-3xl" style={{ background: C.mint, opacity: 0.3 }} />
     </div>
   );
 }
