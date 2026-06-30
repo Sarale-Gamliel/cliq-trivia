@@ -292,7 +292,7 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
           <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 py-8 md:py-12 lg:grid-cols-2">
 
             {/* RIGHT: copy */}
-            <div className="text-center lg:text-right space-y-5">
+            <div className="text-center lg:text-right space-y-5 lg:pr-12">
               <h1 className="text-5xl font-black leading-tight tracking-tight md:text-7xl" style={{ color: C.dark, letterSpacing: '-0.02em' }}>
                 חוויה בלתי נשכחת
                 <br />
