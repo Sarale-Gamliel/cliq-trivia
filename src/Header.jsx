@@ -291,7 +291,12 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
 
           <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 md:py-24 lg:grid-cols-2">
 
-            {/* RIGHT: copy */}
+            {/* RIGHT: Phone mockup */}
+            <div className="hidden lg:flex items-center justify-center order-first">
+              <PhoneVisual />
+            </div>
+
+            {/* LEFT: copy */}
             <div className="text-center space-y-6">
               <h1 className="text-5xl font-black leading-tight tracking-tight md:text-7xl" style={{ color: C.dark, letterSpacing: '-0.02em' }}>
                 חוויה בלתי נשכחת
@@ -333,10 +338,6 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
               </div>
             </div>
 
-            {/* LEFT: Phone mockup */}
-            <div className="hidden lg:flex items-center justify-center">
-              <PhoneVisual />
-            </div>
           </div>
         </section>
       )}
