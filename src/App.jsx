@@ -805,8 +805,8 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
           value: name,
           sub: delta > 0 ? `עלה ${delta} מקומות ↑` : `ירד ${Math.abs(delta)} מקומות ↓`,
           c: delta > 0
-            ? 'from-emerald-500/20 to-green-500/20 border-emerald-500/30 text-emerald-200'
-            : 'from-red-500/20 to-rose-500/20 border-red-500/30 text-red-200',
+            ? 'from-emerald-500/20 to-green-500/20 border-emerald-500/30 text-emerald-700'
+            : 'from-red-500/20 to-rose-500/20 border-red-500/30 text-red-700',
         });
       });
     }
@@ -817,7 +817,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
       highlights.push({
         icon: '⚡', title: 'המהיר ביותר', value: fastest.name,
         sub: 'ענה ראשון מבין כל המצליחנים!',
-        c: 'from-amber-500/20 to-yellow-500/20 border-amber-500/30 text-amber-200',
+        c: 'from-amber-500/20 to-yellow-500/20 border-amber-500/30 text-amber-700',
       });
     }
 
@@ -827,7 +827,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
       highlights.push({
         icon: '🔥', title: 'כוכב הסיבוב', value: star.name,
         sub: `+${star.pointsGained} נק׳ בסיבוב הזה`,
-        c: 'from-rose-500/20 to-orange-500/20 border-rose-500/30 text-rose-200',
+        c: 'from-rose-500/20 to-orange-500/20 border-rose-500/30 text-rose-700',
       });
     }
 
@@ -837,7 +837,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
       highlights.push({
         icon: '🐢', title: 'הנחוש ביותר', value: slowest.name,
         sub: `חשב לאט, ידע בטח — ${formatResponseTime(slowest.lastAnswerTime)}`,
-        c: 'from-teal-500/20 to-emerald-500/20 border-teal-500/30 text-teal-200',
+        c: 'from-teal-500/20 to-emerald-500/20 border-teal-500/30 text-teal-700',
       });
     }
 
@@ -847,7 +847,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
       highlights.push({
         icon: '😅', title: 'האמיץ המבולבל', value: boldWrong.name,
         sub: `ענה ב-${formatResponseTime(boldWrong.lastAnswerTime)} ... אבל טעה`,
-        c: 'from-pink-500/20 to-rose-500/20 border-pink-500/30 text-pink-200',
+        c: 'from-pink-500/20 to-rose-500/20 border-pink-500/30 text-pink-700',
       });
     }
 
@@ -861,7 +861,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
         highlights.push({
           icon: '🎭', title: 'הפח הכי גדול', value: `תשובה ${mostPopularWrong[0]}`,
           sub: `"${optionText}" — ${mostPopularWrong[1]} שחקנים נפלו`,
-          c: 'from-slate-500/20 to-slate-600/20 border-slate-500/30 text-slate-300',
+          c: 'from-slate-500/20 to-slate-600/20 border-slate-500/30 text-slate-700',
         });
       }
     }
@@ -875,10 +875,10 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
         icon: emoji, title: 'הצלחה בסיבוב', value: `${pct}%`,
         sub: msg,
         c: pct >= 70
-          ? 'from-emerald-500/20 to-green-500/20 border-emerald-500/30 text-emerald-200'
+          ? 'from-emerald-500/20 to-green-500/20 border-emerald-500/30 text-emerald-700'
           : pct >= 40
-          ? 'from-amber-500/20 to-yellow-500/20 border-amber-500/30 text-amber-200'
-          : 'from-red-500/20 to-rose-500/20 border-red-500/30 text-red-200',
+          ? 'from-amber-500/20 to-yellow-500/20 border-amber-500/30 text-amber-700'
+          : 'from-red-500/20 to-rose-500/20 border-red-500/30 text-red-700',
       });
     }
 
@@ -888,7 +888,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
       highlights.push({
         icon: '🏅', title: 'האמיץ שבכולם', value: quickest.name,
         sub: `ניסה הכי מהר — ${formatResponseTime(quickest.lastAnswerTime)}`,
-        c: 'from-cyan-500/20 to-blue-500/20 border-cyan-500/30 text-cyan-200',
+        c: 'from-cyan-500/20 to-blue-500/20 border-cyan-500/30 text-cyan-700',
       });
     }
 
