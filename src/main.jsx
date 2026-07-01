@@ -33,13 +33,10 @@ function Root() {
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setLoading(false);
-    });
-
+    // onAuthStateChange fires INITIAL_SESSION first — wait for it before rendering
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      setLoading(false);
       if (session) { setIsGuest(false); setShowAuthModal(false); }
     });
 
