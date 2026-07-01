@@ -36,8 +36,8 @@ function Auth({ onGuestLogin, compact = false }) {
   const handleSignIn = async () => {
     setLoading(true); setMessage('');
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) setMessage('שגיאה בהתחברות: ' + error.message);
-    setLoading(false);
+    if (error) { setMessage('שגיאה בהתחברות: ' + error.message); setLoading(false); }
+    else window.location.href = '/dashboard';
   };
 
   return (
