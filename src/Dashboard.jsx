@@ -39,6 +39,7 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
   const [openTopic, setOpenTopic] = useState(null);
   const [topics, setTopics] = useState([]);
   const [newTopicName, setNewTopicName] = useState('');
+  const [showNewTopic, setShowNewTopic] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userForm, setUserForm] = useState({ first_name: initName || '', email: session?.user?.email || '' });
@@ -71,10 +72,12 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
   const addTopic = async () => {
     if (!newTopicName.trim()) return;
     setSaving(true);
-    await supabase.from('topics').insert([{ name: newTopicName.trim() }]);
+    const { data } = await supabase.from('topics').insert([{ name: newTopicName.trim() }]).select().single();
     setNewTopicName('');
+    setShowNewTopic(false);
     await loadTopics();
     setSaving(false);
+    if (data) setOpenTopic(data);
   };
 
   const deleteTopic = async (id, name) => {
@@ -276,29 +279,44 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
           {activeTab === 'topics' && (
             !isLoggedIn ? <LockedSection onShowAuth={onShowAuth} /> : (
               <div>
-                <h2 className="text-lg font-black mb-5" style={{ color: C.dark }}>המאגרים שלי</h2>
-
-                <div className="flex gap-3 mb-6">
-                  <input
-                    type="text"
-                    value={newTopicName}
-                    onChange={e => setNewTopicName(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && addTopic()}
-                    placeholder="שם הנושא החדש, לדוגמה: חנוכה..."
-                    className="flex-1 rounded-xl px-4 py-3 text-sm transition focus:outline-none"
-                    style={{ background: '#fdf8f6', border: `1.5px solid ${C.pinkLight}`, color: C.dark }}
-                    onFocus={e => e.target.style.borderColor = C.pink}
-                    onBlur={e => e.target.style.borderColor = C.pinkLight}
-                  />
+                <div className="flex items-center justify-between mb-5">
+                  <h2 className="text-lg font-black" style={{ color: C.dark }}>המאגרים שלי</h2>
                   <button
-                    onClick={addTopic}
-                    disabled={saving}
-                    className="text-white font-bold px-5 py-3 rounded-xl transition flex items-center gap-2 disabled:opacity-50 hover:scale-[1.01]"
+                    onClick={() => { setShowNewTopic(v => !v); setNewTopicName(''); }}
+                    className="flex items-center gap-2 text-white font-bold px-4 py-2.5 rounded-xl transition hover:scale-[1.02]"
                     style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)`, boxShadow: '0 4px 12px rgba(239,144,152,0.3)' }}>
-                    {saving ? <Loader className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
-                    הוסף
+                    <Plus className="h-4 w-4" />
+                    מאגר חדש
                   </button>
                 </div>
+
+                {showNewTopic && (
+                  <div className="mb-5 p-4 rounded-2xl"
+                    style={{ background: 'rgba(255,255,255,0.9)', border: `1.5px solid ${C.pinkLight}` }}>
+                    <p className="text-xs font-bold mb-3" style={{ color: C.mid }}>שם המאגר החדש</p>
+                    <div className="flex gap-2">
+                      <input
+                        autoFocus
+                        type="text"
+                        value={newTopicName}
+                        onChange={e => setNewTopicName(e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && addTopic()}
+                        placeholder="לדוגמה: חנוכה, חתונת דנה..."
+                        className="flex-1 rounded-xl px-4 py-2.5 text-sm transition focus:outline-none"
+                        style={{ background: '#fdf8f6', border: `1.5px solid ${C.pinkLight}`, color: C.dark }}
+                        onFocus={e => e.target.style.borderColor = C.pink}
+                        onBlur={e => e.target.style.borderColor = C.pinkLight}
+                      />
+                      <button
+                        onClick={addTopic}
+                        disabled={saving || !newTopicName.trim()}
+                        className="text-white font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-2 disabled:opacity-40 hover:scale-[1.01]"
+                        style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)` }}>
+                        {saving ? <Loader className="h-4 w-4 animate-spin" /> : 'צרי והוסיפי שאלות →'}
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 {loading ? (
                   <div className="text-center py-8 flex items-center justify-center gap-2" style={{ color: C.mid }}>
