@@ -445,8 +445,8 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                   className="relative overflow-hidden inline-flex items-center gap-2 rounded-2xl font-black px-8 py-4 text-white justify-center transition-transform hover:scale-[1.03]"
                   style={{ background: 'linear-gradient(135deg, #10b981, #059669)', boxShadow: '0 12px 28px rgba(16,185,129,0.3)', fontSize: '1.05rem' }}>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer pointer-events-none" />
-                  <span className="relative text-xl leading-none">🛒</span>
-                  <span className="relative">תמחור ותוכניות</span>
+                  <WA_SVG />
+                  <span className="relative">הזמנת אירוע</span>
                 </a>
                 <button onClick={onOpenDashboard}
                   className="inline-flex items-center gap-2 rounded-2xl font-black px-8 py-4 text-white justify-center transition-transform hover:scale-[1.03]"
