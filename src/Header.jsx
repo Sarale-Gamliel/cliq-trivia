@@ -345,7 +345,7 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                   className="inline-flex items-center gap-1.5 rounded-full text-sm font-semibold text-white px-5 py-2 transition-transform hover:scale-[1.03]"
                   style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)`, boxShadow: '0 4px 14px rgba(239,144,152,0.3)' }}>
                   <UserCircle className="h-4 w-4" />
-                  {session && !isGuest && userName ? userName : 'כניסת מנחה'}
+                  {session && !isGuest && userName ? 'איזור אישי' : 'כניסת מנחה'}
                 </button>
                 {session && !isGuest && (
                   <div className="absolute top-full mt-2 left-0 bg-white rounded-2xl overflow-hidden opacity-0 group-hover/host:opacity-100 pointer-events-none group-hover/host:pointer-events-auto transition-all z-50 min-w-[200px]"
@@ -357,8 +357,8 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                         {userName?.[0]?.toUpperCase()}
                       </div>
                       <div>
-                        <div className="text-sm font-black" style={{ color: C.dark }}>{userName}</div>
-                        <div className="text-xs" style={{ color: C.mid }}>מנחה</div>
+                        <div className="text-xs" style={{ color: C.mid }}>היי,</div>
+                        <div className="text-sm font-black" style={{ color: C.dark }}>{userName} 👋</div>
                       </div>
                     </div>
                     {/* Menu items */}
@@ -484,7 +484,7 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                         style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)` }}>
                         {userName[0]?.toUpperCase()}
                       </span>
-                      {userName}
+                      איזור אישי
                     </>
                   ) : (
                     <>
