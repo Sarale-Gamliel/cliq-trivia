@@ -1008,8 +1008,8 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
         </div>
       )}
 
-      {/* Feature 7: Danger zone overlay */}
-      {showDangerZone && (
+      {/* Danger zone: transition happens silently */}
+      {false && showDangerZone && (
         <div className="fixed inset-0 z-[120] flex items-center justify-center">
           <div className="absolute inset-0 bg-gradient-to-br from-[#071520] via-[#160a30] to-[#071520] animate-pulse-slow" />
           <div className="absolute inset-0" style={{
@@ -1193,36 +1193,23 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2 justify-center">
-                  {players.filter(p => p.isConnected).map((p, i) => {
-                    const colors = [
-                      'from-indigo-400 to-purple-500',
-                      'from-pink-400 to-rose-500',
-                      'from-cyan-400 to-blue-500',
-                      'from-amber-400 to-orange-500',
-                      'from-emerald-400 to-teal-500',
-                    ];
-                    const team = gameSettings.teamMode ? TEAMS.find(t => t.id === p.team) : null;
-                    return (
-                      <div
-                        key={p.id}
-                        className="relative group animate-float"
-                        style={{ animationDelay: `${i * 0.15}s` }}
-                      >
-                        <div className="px-5 py-3 rounded-2xl font-black flex items-center gap-2 text-white"
-                          style={{
-                            background: ['#ef9098','#c5d9d2','#f5c5be','#fce5d8','#10b981'][i % 5],
-                            boxShadow: '0 4px 12px rgba(239,144,152,0.25)',
-                            color: ['#ef9098','#c5d9d2','#fce5d8'].includes(['#ef9098','#c5d9d2','#f5c5be','#fce5d8','#10b981'][i % 5]) ? '#1e1535' : 'white',
-                          }}>
-                          {team && <span className="text-sm">{team.emoji}</span>}
-                          <span className="text-sm">{p.name}</span>
-                          <span className="text-[10px] px-2 py-0.5 rounded-full font-mono bg-black/10">{formatDuration(p.callDuration)}</span>
+                {players.filter(p => p.isConnected).length > 0 && (
+                  <div className="flex items-center justify-center gap-3">
+                    <div className="flex -space-x-3 space-x-reverse">
+                      {players.filter(p => p.isConnected).slice(0, 6).map((p, i) => (
+                        <div key={p.id} className="h-11 w-11 rounded-full flex items-center justify-center text-sm font-black border-2 border-white"
+                          style={{ background: ['#ef9098','#c5d9d2','#f5c5be','#10b981','#fce5d8','#a78bfa'][i % 6], color: '#1e1535', zIndex: 6 - i }}>
+                          {p.name[0]}
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                      ))}
+                    </div>
+                    <div className="px-4 py-2.5 rounded-2xl font-black flex items-center gap-2"
+                      style={{ background: '#ef9098', boxShadow: '0 4px 12px rgba(239,144,152,0.3)', color: 'white' }}>
+                      <User className="h-4 w-4" />
+                      <span>{players.filter(p => p.isConnected).length} מחוברים</span>
+                    </div>
+                  </div>
+                )}
 
                 <button onClick={startGame}
                   className="relative overflow-hidden text-white font-black text-xl px-10 py-4 rounded-2xl transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-3 mx-auto"
@@ -1308,25 +1295,33 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
               </div>
 
               {/* Progress Bar */}
-              <div className="relative mb-6">
-                <div className="flex justify-between text-xs mb-1" style={{ color: '#6b6580' }}>
-                  <span>תשובות שהתקבלו</span>
-                  <span className="font-bold" style={{ color: '#ef9098' }}>{Math.round(answerPercentage)}%</span>
-                </div>
-                <div className="relative h-3 rounded-full overflow-hidden" style={{ background: 'rgba(239,144,152,0.12)', border: '1px solid rgba(239,144,152,0.18)' }}>
-                  <div
-                    className="absolute inset-y-0 right-0 bg-gradient-to-l from-teal-400 via-purple-500 to-pink-400 rounded-full transition-all duration-500 ease-out shadow-lg shadow-teal-500/30"
-                    style={{ width: `${answerPercentage}%` }}
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
-                  </div>
-                  {answerPercentage < 100 && (
-                    <div className="absolute inset-0 flex items-center justify-center text-[10px] font-bold" style={{ color: '#a090a8' }}>
-                      {players.filter(p => p.isConnected && !p.isEliminated && p.lastAnswer === null).length} ממתינים
+              {/* Answer distribution bar */}
+              {(() => {
+                const active = players.filter(p => p.isConnected && !p.isEliminated);
+                const total = active.length || 1;
+                const correct = active.filter(p => p.lastAnswer === currentQuestion?.correctIndex).length;
+                const wrong = active.filter(p => p.lastAnswer !== null && p.lastAnswer !== currentQuestion?.correctIndex).length;
+                const pending = total - correct - wrong;
+                const correctPct = Math.round((correct / total) * 100);
+                const wrongPct = Math.round((wrong / total) * 100);
+                const pendingPct = 100 - correctPct - wrongPct;
+                return (
+                  <div className="mb-6">
+                    <div className="flex justify-between text-xs mb-2 font-bold">
+                      <span style={{ color: '#6b6580' }}>{pending} ממתינים</span>
+                      <div className="flex gap-3">
+                        <span style={{ color: '#10b981' }}>✓ {correct} נכון</span>
+                        <span style={{ color: '#ef4444' }}>✗ {wrong} לא נכון</span>
+                      </div>
                     </div>
-                  )}
-                </div>
-              </div>
+                    <div className="flex h-4 rounded-full overflow-hidden gap-0.5">
+                      {correctPct > 0 && <div className="transition-all duration-500 rounded-r-full" style={{ width: `${correctPct}%`, background: '#10b981' }} />}
+                      {wrongPct > 0 && <div className="transition-all duration-500" style={{ width: `${wrongPct}%`, background: '#ef4444' }} />}
+                      {pendingPct > 0 && <div className="transition-all duration-500 rounded-l-full" style={{ width: `${pendingPct}%`, background: 'rgba(107,101,128,0.2)' }} />}
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* The Question */}
               <div className="relative text-center py-6">
@@ -1356,10 +1351,10 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                       key={idx}
                       className="relative rounded-2xl p-5 transition-all duration-300 hover:scale-[1.01] hover:shadow-md"
                       style={{
-                        background: 'rgba(255,255,255,0.88)',
-                        border: `1px solid ${numAnswers > 0 ? pal.accent : 'rgba(239,144,152,0.15)'}`,
-                        borderRight: `5px solid ${pal.accent}`,
-                        boxShadow: '0 2px 12px rgba(239,144,152,0.08)'
+                        background: numAnswers > 0 ? `${pal.accent}22` : 'rgba(255,255,255,0.95)',
+                        border: `1px solid ${pal.accent}`,
+                        borderRight: `6px solid ${pal.accent}`,
+                        boxShadow: `0 2px 16px ${pal.accent}44`
                       }}
                     >
                       <div className="flex items-center gap-4">
