@@ -2001,10 +2001,10 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                 { emoji: '💍', title: 'אירועי שמחה',      desc: 'חתונה, בר/בת מצווה — כולם מחייגים, כולם מנצחים',             bg: '#c5d9d2' },
                 { emoji: '🎮', title: 'ערב בידור',         desc: 'חידון בסגנון טלוויזיה שמשגע כל קהל, בכל גיל',               bg: '#f5c5be' },
               ].map((card, i) => (
-                <div key={i} className="group rounded-2xl p-6 hover:-translate-y-1 transition-all duration-200 cursor-default bg-white"
-                  style={{ border: '1px solid #f0ebe8', boxShadow: '0 2px 12px rgba(239,144,152,0.06)' }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = '#f5c5be'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(239,144,152,0.15)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#f0ebe8'; e.currentTarget.style.boxShadow = '0 2px 12px rgba(239,144,152,0.06)'; }}>
+                <div key={i} className="group rounded-2xl p-6 cursor-default bg-white"
+                  style={{ border: '1px solid #f0ebe8', boxShadow: '0 2px 12px rgba(239,144,152,0.06)', transition: 'all 250ms ease' }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-8px)'; e.currentTarget.style.borderColor = '#7c3aed44'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(124,58,237,0.15)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = '#f0ebe8'; e.currentTarget.style.boxShadow = '0 2px 12px rgba(239,144,152,0.06)'; }}>
                   <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4" style={{ background: card.bg }}>
                     {card.emoji}
                   </div>

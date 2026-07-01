@@ -201,8 +201,80 @@ function PhoneVisual() {
 }
 
 /* ─── Main Header ─── */
+function DemoModal({ onClose }) {
+  const questions = [
+    { q: 'מה הבירה הכי נמכרת בעולם?', opts: ['בדוויזר', 'היינקן', 'קורונה', 'גינס'], correct: 0 },
+    { q: 'כמה צלעות יש לשושנית?', opts: ['4', '5', '6', '8'], correct: 2 },
+    { q: 'מי כתב את "הנסיך הקטן"?', opts: ['וייל', 'אנטואן דה סנט-אקזופרי', 'קפקא', 'מאן'], correct: 1 },
+  ];
+  const [qi, setQi] = useState(0);
+  const [picked, setPick] = useState(null);
+  const [score, setScore] = useState(0);
+  const q = questions[qi];
+  const done = qi >= questions.length;
+
+  const handlePick = (i) => {
+    if (picked !== null) return;
+    setPick(i);
+    if (i === q.correct) setScore(s => s + 750);
+    setTimeout(() => { setPick(null); setQi(qi + 1); }, 1200);
+  };
+
+  const colors = ['#ef4444','#3b82f6','#f59e0b','#10b981'];
+
+  return (
+    <div className="fixed inset-0 z-[300] flex items-center justify-center p-4" dir="rtl">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative w-full max-w-md rounded-3xl overflow-hidden shadow-2xl" style={{ background: '#1e1535' }}>
+        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+          <span className="font-black text-white">🎮 נסה עכשיו — CLIQ Demo</span>
+          <button onClick={onClose} className="text-white/50 hover:text-white transition text-xl">✕</button>
+        </div>
+        {done ? (
+          <div className="p-8 text-center">
+            <div className="text-5xl mb-4">🏆</div>
+            <div className="text-2xl font-black text-white mb-2">סיימת!</div>
+            <div className="text-3xl font-black mb-4" style={{ color: '#ef9098' }}>{score} נק׳</div>
+            <p className="text-white/60 text-sm mb-6">זו בדיוק החוויה שיקבל הקהל שלך באירוע.</p>
+            <button onClick={onClose}
+              className="w-full py-3 rounded-2xl font-black text-white transition hover:scale-[1.02]"
+              style={{ background: 'linear-gradient(135deg, #ef9098, #c05070)' }}>
+              אני רוצה לארגן אירוע!
+            </button>
+          </div>
+        ) : (
+          <div className="p-6">
+            <div className="flex justify-between text-xs text-white/50 mb-4">
+              <span>שאלה {qi+1}/{questions.length}</span>
+              <span style={{ color: '#ef9098' }}>{score} נק׳</span>
+            </div>
+            <div className="rounded-2xl p-4 text-center mb-5" style={{ background: 'rgba(255,255,255,0.06)' }}>
+              <p className="font-black text-white text-lg leading-snug">{q.q}</p>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {q.opts.map((opt, i) => (
+                <button key={i} onClick={() => handlePick(i)}
+                  className="rounded-2xl p-3 text-white font-bold text-sm transition hover:scale-[1.03] active:scale-95"
+                  style={{
+                    background: picked === null ? colors[i] : i === q.correct ? '#10b981' : picked === i ? '#ef4444' : `${colors[i]}55`,
+                    opacity: picked !== null && i !== q.correct && picked !== i ? 0.5 : 1,
+                    transition: 'all 0.3s',
+                  }}>
+                  <div className="text-2xl font-black mb-1">{i+1}</div>
+                  {opt}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function Header({ userName, onHome, showHero = false, session, isGuest, onShowAuth, onOpenDashboard }) {
   const [showBooking, setShowBooking] = useState(false);
+  const [showDemo, setShowDemo]       = useState(false);
   const [mobileOpen, setMobileOpen]   = useState(false);
 
   const navLinks = [
@@ -214,6 +286,7 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
   return (
     <>
       {showBooking && <BookingModal onClose={() => setShowBooking(false)} />}
+      {showDemo && <DemoModal onClose={() => setShowDemo(false)} />}
 
       {/* ══ NAVBAR — floating pill (zip design) ══ */}
       <header className="sticky top-0 z-50 w-full" dir="rtl">
@@ -369,6 +442,11 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                   className="inline-flex items-center gap-2 rounded-full border px-7 py-4 text-base font-semibold w-full sm:w-auto justify-center transition-colors hover:opacity-80"
                   style={{ borderColor: 'rgba(239,144,152,0.3)', background: 'rgba(255,255,255,0.8)', color: C.pink }}>
                   הזמן אירוע
+                </button>
+                <button onClick={() => setShowDemo(true)}
+                  className="inline-flex items-center gap-2 rounded-full px-7 py-4 text-base font-semibold w-full sm:w-auto justify-center transition hover:opacity-90"
+                  style={{ background: 'rgba(124,58,237,0.1)', color: '#7c3aed', border: '1px solid rgba(124,58,237,0.2)' }}>
+                  🎮 נסה עכשיו
                 </button>
               </div>
 
