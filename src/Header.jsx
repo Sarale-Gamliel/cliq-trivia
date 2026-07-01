@@ -276,6 +276,12 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
   const [showBooking, setShowBooking] = useState(false);
   const [showDemo, setShowDemo]       = useState(false);
   const [mobileOpen, setMobileOpen]   = useState(false);
+  const [authReady, setAuthReady]     = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setAuthReady(true), 150);
+    return () => clearTimeout(t);
+  }, []);
 
   const navLinks = [
     { label: 'איך זה עובד',  href: '#steps',  icon: '⚡' },
@@ -470,8 +476,8 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                   <span className="relative">🎉 הזמנת אירוע</span>
                 </button>
                 <button onClick={session && !isGuest ? () => window.location.href = '/dashboard' : onShowAuth}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-sm font-bold transition hover:scale-[1.02]"
-                  style={{ background: 'rgba(255,255,255,0.85)', color: C.dark, border: `1px solid rgba(239,144,152,0.2)`, minWidth: '140px', justifyContent: 'center' }}>
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-sm font-bold hover:scale-[1.02]"
+                  style={{ background: 'rgba(255,255,255,0.85)', color: C.dark, border: `1px solid rgba(239,144,152,0.2)`, minWidth: '140px', justifyContent: 'center', transition: 'opacity 0.2s', opacity: authReady ? 1 : 0 }}>
                   {session && !isGuest && userName ? (
                     <>
                       <span className="h-7 w-7 rounded-full flex items-center justify-center text-white text-xs font-black shrink-0"
