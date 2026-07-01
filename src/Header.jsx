@@ -394,7 +394,7 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
         <section className="relative overflow-hidden" dir="rtl">
 
           {/* לוגו ענק מרוכז */}
-          <div className="flex justify-center pt-10 pb-2">
+          <div className="flex justify-center pt-6 pb-0">
             <button onClick={onHome} className="flex items-center gap-4 group">
               <span className="flex h-20 w-20 items-center justify-center rounded-3xl shadow-xl"
                 style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)`, boxShadow: '0 12px 32px rgba(239,144,152,0.4)' }}>
@@ -413,7 +413,7 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
             <div className="absolute top-1/3 left-1/3 h-64 w-64 rounded-full blur-3xl" style={{ background: C.pinkLight, opacity: 0.3 }} />
           </div>
 
-          <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 py-8 md:py-12 lg:grid-cols-2">
+          <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 py-4 md:py-6 lg:grid-cols-2">
 
             {/* RIGHT: copy */}
             <div className="text-center lg:text-right space-y-5 lg:pr-24">
