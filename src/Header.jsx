@@ -443,7 +443,7 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                 className="inline-flex items-center gap-2 text-sm font-semibold justify-center lg:justify-start transition hover:opacity-80"
                 style={{ color: '#7c3aed' }}>
                 🎮 נסה עכשיו בחינם ←
-              </div>
+              </button>
 
               <div className="flex flex-wrap justify-center lg:justify-start gap-2">
                 {[
