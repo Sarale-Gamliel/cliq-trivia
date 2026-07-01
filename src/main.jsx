@@ -33,7 +33,11 @@ function Root() {
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
+    // Timeout fallback — never stay blank more than 1s
+    const fallback = setTimeout(() => setLoading(false), 1000);
+
     supabase.auth.getSession().then(({ data: { session } }) => {
+      clearTimeout(fallback);
       setSession(session);
       setLoading(false);
     });
@@ -43,10 +47,10 @@ function Root() {
       if (session) { setIsGuest(false); setShowAuthModal(false); }
     });
 
-    return () => subscription.unsubscribe();
+    return () => { clearTimeout(fallback); subscription.unsubscribe(); };
   }, []);
 
-  if (loading) return null;
+  if (loading) return <div style={{ minHeight: '100vh', background: '#f0ddd8' }} />;
 
   return (
     <BrowserRouter>
