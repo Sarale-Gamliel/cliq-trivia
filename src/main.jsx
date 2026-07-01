@@ -44,11 +44,7 @@ function Root() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-slate-400" dir="rtl">
-        טוען...
-      </div>
-    );
+    return <div className="min-h-screen" style={{ background: '#f0ddd8' }} />;
   }
 
   return (
