@@ -1968,11 +1968,29 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
       {/* LOBBY LANDING SECTIONS */}
       {gameState === 'LOBBY' && (
         <>
+          {/* ── Stats Bar ── */}
+          <section className="mt-8">
+            <div className="rounded-2xl p-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center"
+              style={{ background: 'linear-gradient(135deg, #7c3aed11, #ef909811)', border: '1px solid rgba(124,58,237,0.12)' }}>
+              {[
+                { num: '1,000+', label: 'משתתפים בו-זמנית' },
+                { num: '< 2s', label: 'עדכון תוצאות בלייב' },
+                { num: '100%', label: 'מותאם לנייד' },
+                { num: '∞', label: 'אפשרויות משחק' },
+              ].map((s, i) => (
+                <div key={i}>
+                  <div className="text-2xl md:text-3xl font-black mb-1" style={{ color: '#7c3aed' }}>{s.num}</div>
+                  <div className="text-xs font-medium" style={{ color: '#6b6580' }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+
           {/* ── Event Types ── */}
           <section className="mt-10">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-black mb-2" style={{ color: '#1e1535' }}>🎉 מתאים לכל אירוע</h2>
-              <p style={{ color: '#6b6580' }}>טריוויה קולנועית שעובדת בכל פורמט ובכל קהל</p>
+              <h2 className="text-3xl font-black mb-2" style={{ color: '#1e1535' }}>מתאים לכל אירוע</h2>
+              <p style={{ color: '#6b6580' }}>טריוויה חיה שעובדת בכל פורמט ובכל קהל</p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {[
@@ -1998,33 +2016,32 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
           </section>
 
           {/* ── How It Works ── */}
-          <section className="mt-10">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-black mb-2" style={{ color: '#1e1535' }}>איך זה עובד?</h2>
-              <p style={{ color: '#6b6580' }}>שלושה צעדים פשוטים לחוויה בלתי נשכחת</p>
+          <section className="mt-12" id="steps">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-black mb-2" style={{ color: '#1e1535' }}>איך זה עובד?</h2>
+              <p style={{ color: '#6b6580' }}>מהרגע שפותחים עד ל-Leaderboard — 5 צעדים</p>
             </div>
-            <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-6 md:gap-0">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               {[
-                { num: '1', emoji: '📞', title: 'כולם מחייגים', sub: 'למספר אחד',            bg: '#fce5d8' },
-                { num: '2', emoji: '📽️', title: 'מקרינים',      sub: 'על מסך לכל הקהל',      bg: '#c5d9d2' },
-                { num: '3', emoji: '📱', title: 'מתחברים',      sub: 'סורקים QR ומשחקים',    bg: '#f5c5be' },
+                { num: '1', emoji: '✏️', title: 'יוצרים משחק',    sub: 'מוסיפים שאלות או מייצרים עם AI', color: '#7c3aed', bg: '#f5f3ff' },
+                { num: '2', emoji: '📺', title: 'מקרינים',         sub: 'על מסך גדול לכל הקהל',            color: '#ef9098', bg: '#fff1f2' },
+                { num: '3', emoji: '📱', title: 'הקהל מצטרף',      sub: 'סורקים QR או מחייגים',            color: '#10b981', bg: '#f0fdf4' },
+                { num: '4', emoji: '🎮', title: 'עונים בלייב',     sub: 'לוחצים 1-4 בזמן אמת',             color: '#f59e0b', bg: '#fffbeb' },
+                { num: '5', emoji: '🏆', title: 'מנצח!',           sub: 'Leaderboard חי על המסך',           color: '#6366f1', bg: '#eef2ff' },
               ].map((step, i) => (
                 <React.Fragment key={i}>
-                  <div className="flex flex-col items-center text-center max-w-[180px]">
-                    <div className="relative mb-3">
-                      <div className="w-16 h-16 rounded-full flex items-center justify-center text-2xl shadow-md" style={{ background: step.bg }}>
-                        {step.emoji}
-                      </div>
-                      <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full text-white text-xs font-black flex items-center justify-center border-2 border-white"
-                        style={{ background: '#ef9098' }}>
-                        {step.num}
-                      </span>
+                  <div className="rounded-2xl p-5 text-center transition-all hover:-translate-y-1 hover:shadow-lg duration-200"
+                    style={{ background: step.bg, border: `1.5px solid ${step.color}22` }}>
+                    <div className="text-3xl mb-3">{step.emoji}</div>
+                    <div className="h-7 w-7 rounded-full text-white text-xs font-black flex items-center justify-center mx-auto mb-2"
+                      style={{ background: step.color }}>
+                      {step.num}
                     </div>
                     <div className="font-black text-sm mb-1" style={{ color: '#1e1535' }}>{step.title}</div>
                     <div className="text-xs" style={{ color: '#6b6580' }}>{step.sub}</div>
                   </div>
-                  {i < 2 && (
-                    <div className="hidden md:flex items-center px-4 text-2xl font-bold self-center" style={{ color: '#f5c5be' }}>
+                  {i < 4 && (
+                    <div className="hidden md:flex items-center justify-center text-xl" style={{ color: '#d1d5db' }}>
                       ←
                     </div>
                   )}

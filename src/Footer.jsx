@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail } from 'lucide-react';
+import { Mail, Phone } from 'lucide-react';
 
 const WA_SVG = () => (
   <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg">
@@ -7,42 +7,135 @@ const WA_SVG = () => (
   </svg>
 );
 
-function Footer() {
-  return (
-    <footer className="relative z-10 mt-6">
-      {/* Same gradient as navbar */}
-      <div className="rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4"
-        style={{ background: 'linear-gradient(to left, #c5d9d2 0%, #fce5d8 35%, #f5c5be 65%, #ef9098 100%)' }}>
+const C = { dark: '#1e1535', mid: '#6b6580', pink: '#ef9098' };
+const WA = '972559896806';
 
-        {/* Logo + tagline */}
-        <div className="flex items-center gap-3">
-          <span className="text-2xl font-black" style={{ letterSpacing: '-0.05em', color: '#1e1535' }}>
-            CL<span style={{ color: '#b03050' }}>I</span>Q
-          </span>
+function Footer() {
+  const columns = [
+    {
+      title: 'המוצר',
+      links: [
+        { label: 'איך זה עובד', href: '#steps' },
+        { label: 'סוגי אירועים', href: '#events' },
+        { label: 'שאלות נפוצות', href: '#faq' },
+        { label: 'כניסת מנחה', href: '#', action: true },
+      ],
+    },
+    {
+      title: 'אירועים',
+      links: [
+        { label: 'חתונות', href: '#events' },
+        { label: 'בר / בת מצווה', href: '#events' },
+        { label: 'ימי גיבוש', href: '#events' },
+        { label: 'ימי הולדת', href: '#events' },
+        { label: 'אירועי חברה', href: '#events' },
+      ],
+    },
+    {
+      title: 'צרו קשר',
+      links: [],
+      contact: true,
+    },
+  ];
+
+  return (
+    <footer className="relative z-10 mt-16" dir="rtl">
+      <div className="rounded-3xl overflow-hidden" style={{ background: '#1e1535' }}>
+
+        {/* Top section */}
+        <div className="p-8 md:p-10 grid grid-cols-1 md:grid-cols-4 gap-8">
+
+          {/* Brand */}
+          <div className="md:col-span-1">
+            <div className="text-2xl font-black mb-3" style={{ letterSpacing: '-0.05em', color: '#fff' }}>
+              CL<span style={{ color: C.pink }}>I</span>Q
+            </div>
+            <p className="text-sm leading-relaxed mb-4" style={{ color: 'rgba(255,255,255,0.6)' }}>
+              הופכים כל אירוע לחוויה אינטראקטיבית בלתי נשכחת — בזמן אמת.
+            </p>
+            <div className="flex gap-3">
+              <a href={`https://wa.me/${WA}`} target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl transition hover:scale-105"
+                style={{ background: '#10b981', color: '#fff' }}>
+                <WA_SVG /> WhatsApp
+              </a>
+              <a href="mailto:saraledafna@gmail.com"
+                className="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl transition hover:scale-105"
+                style={{ background: 'rgba(255,255,255,0.1)', color: '#fff', border: '1px solid rgba(255,255,255,0.15)' }}>
+                <Mail className="h-3.5 w-3.5" /> מייל
+              </a>
+            </div>
+          </div>
+
+          {/* Links columns */}
+          {columns.slice(0, 2).map((col, ci) => (
+            <div key={ci}>
+              <h4 className="text-sm font-black mb-4" style={{ color: '#fff' }}>{col.title}</h4>
+              <ul className="space-y-2.5">
+                {col.links.map((link, li) => (
+                  <li key={li}>
+                    <a href={link.href}
+                      className="text-sm transition hover:opacity-100"
+                      style={{ color: 'rgba(255,255,255,0.55)' }}
+                      onMouseEnter={e => e.currentTarget.style.color = C.pink}
+                      onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.55)'}>
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+
+          {/* Contact */}
           <div>
-            <div className="text-sm font-black" style={{ color: '#1e1535' }}>רוצים משחק לאירוע שלכם? 🎉</div>
-            <div className="text-xs" style={{ color: '#6b6580' }}>חוויית הטריוויה הקולנועית</div>
+            <h4 className="text-sm font-black mb-4" style={{ color: '#fff' }}>צרו קשר</h4>
+            <div className="space-y-3">
+              <a href={`https://wa.me/${WA}`} target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-2 text-sm transition"
+                style={{ color: 'rgba(255,255,255,0.6)' }}
+                onMouseEnter={e => e.currentTarget.style.color = '#10b981'}
+                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}>
+                <WA_SVG /> 055-989-6806
+              </a>
+              <a href="mailto:saraledafna@gmail.com"
+                className="flex items-center gap-2 text-sm transition"
+                style={{ color: 'rgba(255,255,255,0.6)' }}
+                onMouseEnter={e => e.currentTarget.style.color = C.pink}
+                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}>
+                <Mail className="h-4 w-4" /> saraledafna@gmail.com
+              </a>
+            </div>
+
+            <div className="mt-6 p-4 rounded-2xl" style={{ background: 'rgba(239,144,152,0.1)', border: '1px solid rgba(239,144,152,0.2)' }}>
+              <div className="text-xs font-bold mb-1" style={{ color: C.pink }}>מוכנים להתחיל?</div>
+              <div className="text-xs mb-3" style={{ color: 'rgba(255,255,255,0.6)' }}>צרו קשר ונארגן את האירוע שלכם</div>
+              <a href={`https://wa.me/${WA}`} target="_blank" rel="noopener noreferrer"
+                className="block text-center text-xs font-black py-2 rounded-xl transition hover:scale-[1.02]"
+                style={{ background: C.pink, color: '#fff' }}>
+                שליחת הודעה ב-WhatsApp
+              </a>
+            </div>
           </div>
         </div>
 
-        {/* Contact buttons */}
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          <a href="https://wa.me/972559896806" target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-2 font-bold px-4 py-2.5 rounded-xl transition text-sm hover:scale-[1.03]"
-            style={{ background: 'rgba(255,255,255,0.5)', color: '#1e1535', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.65)' }}>
-            <WA_SVG />
-            055-989-6806
-          </a>
-          <a href="mailto:saraledafna@gmail.com"
-            className="flex items-center gap-2 font-bold px-4 py-2.5 rounded-xl transition text-sm hover:scale-[1.03]"
-            style={{ background: 'rgba(255,255,255,0.5)', color: '#1e1535', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.65)' }}>
-            <Mail className="h-4 w-4" />
-            saraledafna@gmail.com
-          </a>
+        {/* Bottom bar */}
+        <div className="px-8 md:px-10 py-4 flex flex-col md:flex-row items-center justify-between gap-2"
+          style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+          <div className="text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
+            © {new Date().getFullYear()} CLIQ Trivia · כל הזכויות שמורות לשרהלה גמליאל
+          </div>
+          <div className="flex gap-4">
+            {['מדיניות פרטיות', 'תנאי שימוש', 'נגישות'].map(t => (
+              <a key={t} href="#" className="text-xs transition"
+                style={{ color: 'rgba(255,255,255,0.35)' }}
+                onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.7)'}
+                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.35)'}>
+                {t}
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="text-center text-xs mt-2" style={{ color: '#6b6580' }}>
-        © {new Date().getFullYear()} כל הזכויות שמורות לשרהלה גמליאל
       </div>
     </footer>
   );

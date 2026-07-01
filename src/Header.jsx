@@ -334,15 +334,28 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
 
             {/* RIGHT: copy */}
             <div className="text-center lg:text-right space-y-5 lg:pr-24">
-              <h1 className="text-5xl font-black leading-tight tracking-tight md:text-7xl" style={{ color: C.dark, letterSpacing: '-0.02em' }}>
-                חוויה בלתי נשכחת
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold mb-4"
+                style={{ background: 'rgba(124,58,237,0.08)', color: '#7c3aed', border: '1px solid rgba(124,58,237,0.2)' }}>
+                ✨ טריוויה חיה לאירועים
+              </div>
+              <h1 className="text-5xl font-black leading-tight tracking-tight md:text-6xl" style={{ color: C.dark, letterSpacing: '-0.02em' }}>
+                הופכים כל אירוע
                 <br />
-                <span style={{ color: C.pink }}>לכל אירוע</span>
+                <span style={{ color: C.pink }}>לחוויה אינטראקטיבית</span>
               </h1>
 
               <p className="mx-auto max-w-md text-lg leading-relaxed lg:mx-0" style={{ color: C.mid }}>
-                נכנסים בחיוג קצר, עונים בלייב, צוברים נקודות וחוויות.
+                יוצרים שעשועון חי, הקהל מצטרף מהטלפון — ועונה בזמן אמת. ללא התקנות, ללא סיבוך.
               </p>
+
+              <div className="flex flex-wrap gap-2 justify-center lg:justify-end text-sm">
+                {['★★★★★', 'מאות משתתפים', 'כל גיל', 'כל אירוע'].map((t, i) => (
+                  <span key={i} className="px-3 py-1 rounded-full font-medium"
+                    style={{ background: i === 0 ? '#fef3c7' : 'rgba(255,255,255,0.8)', color: i === 0 ? '#92400e' : C.mid, border: '1px solid rgba(239,144,152,0.2)' }}>
+                    {t}
+                  </span>
+                ))}
+              </div>
 
               <div className="flex flex-col items-center gap-3 sm:flex-row lg:justify-start justify-center">
                 <a href={`https://wa.me/${WA_NUMBER}`} target="_blank" rel="noopener noreferrer"
