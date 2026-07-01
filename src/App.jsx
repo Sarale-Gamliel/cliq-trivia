@@ -344,6 +344,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
   };
 
   const startQuestion = (questionIdx) => {
+    setCurrentQuestionIdx(questionIdx);
     // Joker: off by default — set manually via gameSettings.jokerActive
     const joker = gameSettingsRef.current.jokerActive === true;
     setIsJokerQuestion(joker);
@@ -666,8 +667,6 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
     clearInterval(autoplayTimerRef.current);
     const nextIdx = currentQuestionIdxRef.current + 1;
     if (nextIdx < activeQuestions.length) {
-      setCurrentQuestionIdx(nextIdx);
-
       // Feature 7: Show danger zone if >= 2 connected players
       const connectedCount = players.filter(p => p.isConnected).length;
       if (connectedCount >= 2) {
@@ -1501,8 +1500,9 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                 </div>
               )}
 
-              <div className="relative text-center mb-6 flex items-center justify-center gap-3">
-                <span className="text-xl">{categoryIcon}</span>
+              <div className="relative text-center mb-6">
+                <div className="text-xl mb-2">{categoryIcon}</div>
+                <h2 className="text-lg font-black leading-snug" style={{ color: '#1e1535' }}>{currentQuestion?.question}</h2>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
