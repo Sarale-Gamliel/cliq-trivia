@@ -342,19 +342,44 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                   {session && !isGuest && userName ? userName : 'כניסת מנחה'}
                 </button>
                 {session && !isGuest && (
-                  <div className="absolute top-full mt-2 left-0 bg-white border rounded-2xl overflow-hidden opacity-0 group-hover/host:opacity-100 pointer-events-none group-hover/host:pointer-events-auto transition-all z-50 min-w-[180px] shadow-xl"
-                    style={{ borderColor: '#f0ebe8', boxShadow: '0 16px 40px rgba(239,144,152,0.18)' }}>
-                    <div className="px-4 py-3 text-sm font-black text-center" style={{ color: C.dark, background: 'rgba(239,144,152,0.07)', borderBottom: '1px solid #f0ebe8' }}>
-                      היי {userName} 👋
+                  <div className="absolute top-full mt-2 left-0 bg-white rounded-2xl overflow-hidden opacity-0 group-hover/host:opacity-100 pointer-events-none group-hover/host:pointer-events-auto transition-all z-50 min-w-[200px]"
+                    style={{ boxShadow: '0 16px 40px rgba(0,0,0,0.12)', border: '1px solid #f0ebe8' }}>
+                    {/* Header */}
+                    <div className="px-4 py-3 flex items-center gap-3" style={{ borderBottom: '1px solid #f0ebe8' }}>
+                      <div className="h-9 w-9 rounded-full flex items-center justify-center text-white font-black text-sm shrink-0"
+                        style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)` }}>
+                        {userName?.[0]?.toUpperCase()}
+                      </div>
+                      <div>
+                        <div className="text-sm font-black" style={{ color: C.dark }}>{userName}</div>
+                        <div className="text-xs" style={{ color: C.mid }}>מנחה</div>
+                      </div>
                     </div>
-                    <div className="p-2">
-                      <button onClick={() => supabase.auth.signOut()}
-                        className="w-full flex items-center justify-center gap-2 font-bold py-2 rounded-xl text-xs transition"
-                        style={{ background: '#fff5f5', color: '#dc2626', border: '1px solid #fca5a5' }}
-                        onMouseEnter={e => e.currentTarget.style.background = '#fee2e2'}
-                        onMouseLeave={e => e.currentTarget.style.background = '#fff5f5'}>
-                        <LogOut className="h-4 w-4" /> התנתקות
-                      </button>
+                    {/* Menu items */}
+                    <div className="p-1.5 space-y-0.5">
+                      {[
+                        { icon: '🗂️', label: 'מאגרי שאלות', action: onOpenDashboard },
+                        { icon: '👤', label: 'פרטים אישיים', action: onOpenDashboard },
+                        { icon: '⚙️', label: 'הגדרות', action: onOpenDashboard },
+                      ].map((item, i) => (
+                        <button key={i} onClick={item.action}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium text-right transition"
+                          style={{ color: C.dark }}
+                          onMouseEnter={e => e.currentTarget.style.background = '#fdf8f6'}
+                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                          <span>{item.icon}</span>
+                          {item.label}
+                        </button>
+                      ))}
+                      <div style={{ borderTop: '1px solid #f0ebe8', marginTop: '4px', paddingTop: '4px' }}>
+                        <button onClick={() => supabase.auth.signOut()}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition"
+                          style={{ color: '#dc2626' }}
+                          onMouseEnter={e => e.currentTarget.style.background = '#fff5f5'}
+                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                          <LogOut className="h-4 w-4" /> התנתקות
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )}
