@@ -1,11 +1,30 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import App from './App.jsx'
 import Auth from './Auth.jsx'
+import Dashboard from './Dashboard.jsx'
+import Footer from './Footer.jsx'
 import PlayerApp from './PlayerApp.jsx'
 import { supabase } from './supabaseClient'
 import './index.css'
+
+function DashboardPage({ session, isGuest, onShowAuth }) {
+  const navigate = useNavigate();
+  if (!session || isGuest) return <Navigate to="/" replace />;
+  return (
+    <div className="min-h-screen" style={{ background: '#f0ddd8' }} dir="rtl">
+      <Dashboard
+        session={session}
+        isGuest={isGuest}
+        onShowAuth={onShowAuth}
+        onClose={() => navigate('/')}
+        onPlay={() => navigate('/')}
+      />
+      <div className="px-4 md:px-6 lg:px-8 pb-8"><Footer /></div>
+    </div>
+  );
+}
 
 function Root() {
   const [session, setSession] = useState(null);
@@ -40,6 +59,9 @@ function Root() {
       <Routes>
         <Route path="/join"           element={<PlayerApp />} />
         <Route path="/join/:roomCode" element={<PlayerApp />} />
+        <Route path="/dashboard" element={
+          <DashboardPage session={session} isGuest={isGuest} onShowAuth={() => setShowAuthModal(true)} />
+        } />
         <Route path="/*" element={
           <>
             <App

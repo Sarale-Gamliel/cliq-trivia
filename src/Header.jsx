@@ -469,7 +469,7 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer pointer-events-none" />
                   <span className="relative">🎉 הזמנת אירוע</span>
                 </button>
-                <button onClick={session && !isGuest ? onOpenDashboard : onShowAuth}
+                <button onClick={session && !isGuest ? () => window.location.href = '/dashboard' : onShowAuth}
                   className="inline-flex items-center gap-1.5 text-sm font-semibold transition hover:opacity-80"
                   style={{ color: C.mid }}>
                   <UserCircle className="h-4 w-4" />
