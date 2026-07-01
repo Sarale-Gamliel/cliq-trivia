@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import App from './App.jsx'
 import Auth from './Auth.jsx'
 import Dashboard from './Dashboard.jsx'
@@ -10,7 +10,6 @@ import { supabase } from './supabaseClient'
 import './index.css'
 
 function DashboardPage({ session, isGuest, onShowAuth }) {
-  const navigate = useNavigate();
   if (!session || isGuest) return <Navigate to="/" replace />;
   return (
     <div className="min-h-screen" style={{ background: '#f0ddd8' }} dir="rtl">
@@ -18,8 +17,8 @@ function DashboardPage({ session, isGuest, onShowAuth }) {
         session={session}
         isGuest={isGuest}
         onShowAuth={onShowAuth}
-        onClose={() => navigate('/')}
-        onPlay={() => navigate('/')}
+        onClose={() => window.location.href = '/'}
+        onPlay={() => window.location.href = '/'}
       />
       <div className="px-4 md:px-6 lg:px-8 pb-8"><Footer /></div>
     </div>
@@ -29,17 +28,11 @@ function DashboardPage({ session, isGuest, onShowAuth }) {
 function Root() {
   const [session, setSession] = useState(null);
   const [isGuest, setIsGuest] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
-    // Timeout fallback — never stay blank more than 500ms
-    const fallback = setTimeout(() => setLoading(false), 500);
-
     supabase.auth.getSession().then(({ data: { session } }) => {
-      clearTimeout(fallback);
       setSession(session);
-      setLoading(false);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -47,10 +40,8 @@ function Root() {
       if (session) { setIsGuest(false); setShowAuthModal(false); }
     });
 
-    return () => { clearTimeout(fallback); subscription.unsubscribe(); };
+    return () => subscription.unsubscribe();
   }, []);
-
-  if (loading) return null;
 
   return (
     <BrowserRouter>
@@ -70,15 +61,9 @@ function Root() {
             />
             {showAuthModal && !session && (
               <div className="fixed inset-0 z-[300] flex items-center justify-center p-4" dir="rtl">
-                <div
-                  className="absolute inset-0 bg-black/75 backdrop-blur-sm"
-                  onClick={() => setShowAuthModal(false)}
-                />
+                <div className="absolute inset-0 bg-black/75 backdrop-blur-sm" onClick={() => setShowAuthModal(false)} />
                 <div className="relative w-full max-w-md">
-                  <Auth
-                    onGuestLogin={() => { setIsGuest(true); setShowAuthModal(false); }}
-                    compact
-                  />
+                  <Auth onGuestLogin={() => { setIsGuest(true); setShowAuthModal(false); }} compact />
                 </div>
               </div>
             )}
