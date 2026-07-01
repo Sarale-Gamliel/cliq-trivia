@@ -288,11 +288,12 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
       {showBooking && <BookingModal onClose={() => setShowBooking(false)} />}
       {showDemo && <DemoModal onClose={() => setShowDemo(false)} />}
 
-      {/* ══ NAVBAR ══ */}
-      <header className={showHero ? 'w-full' : 'sticky top-0 z-50 w-full'} dir="rtl">
+      {/* ══ NAVBAR — only when no hero ══ */}
+      {!showHero && (
+      <header className="sticky top-0 z-50 w-full" dir="rtl">
         <div className="max-w-7xl mx-auto px-4 pt-3 pb-2">
-          <div className={`flex items-center gap-3 px-5 py-2.5 ${showHero ? 'justify-center' : 'justify-between'}`}
-            style={showHero ? {} : {
+          <div className="flex items-center gap-3 px-5 py-2.5 justify-between"
+            style={{
               borderRadius: '9999px',
               border: '1px solid rgba(239,144,152,0.25)',
               background: 'rgba(255,255,255,0.92)',
@@ -300,13 +301,13 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
               boxShadow: '0 2px 16px rgba(239,144,152,0.12)',
             }}>
 
-            {/* Logo — גדול במצב Hero, קטן אחרת */}
-            <button onClick={onHome} className="flex items-center gap-2.5 group shrink-0">
-              <span className={`flex items-center justify-center rounded-2xl shadow-md ${showHero ? 'h-12 w-12' : 'h-8 w-8'}`}
+            {/* Logo */}
+            <button onClick={onHome} className="flex items-center gap-3 group shrink-0">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl shadow-sm"
                 style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)` }}>
-                <Sparkles className={`text-white ${showHero ? 'h-6 w-6' : 'h-4 w-4'}`} />
+                <Sparkles className="h-4 w-4 text-white" />
               </span>
-              <span className={`font-black group-hover:opacity-80 transition-opacity ${showHero ? 'text-3xl' : 'text-xl'}`}
+              <span className="text-xl font-black group-hover:opacity-80 transition-opacity"
                 style={{ letterSpacing: '-0.05em', color: C.dark }}>
                 CL<span style={{ color: C.pink }}>I</span>Q
               </span>
@@ -386,10 +387,25 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
           )}
         </div>
       </header>
+      )}
 
       {/* ══ HERO ══ */}
       {showHero && (
         <section className="relative overflow-hidden" dir="rtl">
+
+          {/* לוגו ענק מרוכז */}
+          <div className="flex justify-center pt-10 pb-2">
+            <button onClick={onHome} className="flex items-center gap-4 group">
+              <span className="flex h-20 w-20 items-center justify-center rounded-3xl shadow-xl"
+                style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)`, boxShadow: '0 12px 32px rgba(239,144,152,0.4)' }}>
+                <Sparkles className="h-10 w-10 text-white" />
+              </span>
+              <span className="text-6xl md:text-7xl font-black group-hover:opacity-90 transition-opacity"
+                style={{ letterSpacing: '-0.04em', color: C.dark }}>
+                CL<span style={{ color: C.pink }}>I</span>Q
+              </span>
+            </button>
+          </div>
           {/* Soft color wash blobs */}
           <div className="pointer-events-none absolute inset-0 -z-10">
             <div className="absolute -top-24 right-0 h-96 w-96 rounded-full blur-3xl" style={{ background: C.peach, opacity: 0.55 }} />
