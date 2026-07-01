@@ -1374,6 +1374,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                               style={{ background: pal.accent, color: pal.num }}
                             >
                               ●
+                            </span>
                           ))}
                         </div>
                       )}
