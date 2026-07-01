@@ -470,10 +470,22 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                   <span className="relative">🎉 הזמנת אירוע</span>
                 </button>
                 <button onClick={session && !isGuest ? () => window.location.href = '/dashboard' : onShowAuth}
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold transition hover:opacity-80"
-                  style={{ color: C.mid }}>
-                  <UserCircle className="h-4 w-4" />
-                  {session && !isGuest && userName ? userName : 'כניסת מנחה'}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-sm font-bold transition hover:scale-[1.02]"
+                  style={{ background: 'rgba(255,255,255,0.85)', color: C.dark, border: `1px solid rgba(239,144,152,0.2)` }}>
+                  {session && !isGuest && userName ? (
+                    <>
+                      <span className="h-7 w-7 rounded-full flex items-center justify-center text-white text-xs font-black"
+                        style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)` }}>
+                        {userName[0]?.toUpperCase()}
+                      </span>
+                      {userName} ←
+                    </>
+                  ) : (
+                    <>
+                      <UserCircle className="h-4 w-4" style={{ color: C.pink }} />
+                      כניסת מנחה
+                    </>
+                  )}
                 </button>
               </div>
 
