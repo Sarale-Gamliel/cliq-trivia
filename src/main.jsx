@@ -9,7 +9,14 @@ import PlayerApp from './PlayerApp.jsx'
 import { supabase } from './supabaseClient'
 import './index.css'
 
-function DashboardPage({ session, isGuest, onShowAuth }) {
+function DashboardPage({ session, isGuest, sessionChecked, onShowAuth }) {
+  if (!sessionChecked) return (
+    <div className="min-h-screen flex items-center justify-center" style={{ background: '#f0ddd8' }}>
+      <div className="text-3xl font-black animate-pulse" style={{ color: '#ef9098', letterSpacing: '-0.05em' }}>
+        CL<span style={{ color: '#1e1535' }}>I</span>Q
+      </div>
+    </div>
+  );
   if (!session || isGuest) return <Navigate to="/" replace />;
   return (
     <div className="min-h-screen" style={{ background: '#f0ddd8' }} dir="rtl">
@@ -27,12 +34,14 @@ function DashboardPage({ session, isGuest, onShowAuth }) {
 
 function Root() {
   const [session, setSession] = useState(null);
+  const [sessionChecked, setSessionChecked] = useState(false);
   const [isGuest, setIsGuest] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      setSessionChecked(true);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -49,7 +58,7 @@ function Root() {
         <Route path="/join"           element={<PlayerApp />} />
         <Route path="/join/:roomCode" element={<PlayerApp />} />
         <Route path="/dashboard" element={
-          <DashboardPage session={session} isGuest={isGuest} onShowAuth={() => setShowAuthModal(true)} />
+          <DashboardPage session={session} isGuest={isGuest} sessionChecked={sessionChecked} onShowAuth={() => setShowAuthModal(true)} />
         } />
         <Route path="/*" element={
           <>
