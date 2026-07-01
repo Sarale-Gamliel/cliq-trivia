@@ -1161,12 +1161,6 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                     <Bot className="h-4 w-4" />
                     חבר את כל הבוטים
                   </button>
-                  <button onClick={() => setShowPlayerManager(true)}
-                    className="font-bold px-5 py-2.5 rounded-xl transition-all text-sm flex items-center gap-2 hover:scale-[1.02]"
-                    style={{ background: '#fdf8f6', border: '1px solid #f5c5be', color: '#1e1535' }}>
-                    <User className="h-4 w-4" />
-                    ניהול שחקנים
-                  </button>
                 </div>
 
                 {/* QR join panel — כרטיס אחד נקי */}
@@ -1193,11 +1187,12 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                         </div>
                       ))}
                     </div>
-                    <div className="px-4 py-2.5 rounded-2xl font-black flex items-center gap-2"
+                    <button onClick={() => setShowPlayerManager(true)}
+                      className="px-4 py-2.5 rounded-2xl font-black flex items-center gap-2 transition hover:scale-[1.03] active:scale-95"
                       style={{ background: '#ef9098', boxShadow: '0 4px 12px rgba(239,144,152,0.3)', color: 'white' }}>
                       <User className="h-4 w-4" />
                       <span>{players.filter(p => p.isConnected).length} מחוברים</span>
-                    </div>
+                    </button>
                   </div>
                 )}
 
