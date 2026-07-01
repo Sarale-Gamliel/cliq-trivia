@@ -288,8 +288,8 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
       {showBooking && <BookingModal onClose={() => setShowBooking(false)} />}
       {showDemo && <DemoModal onClose={() => setShowDemo(false)} />}
 
-      {/* ══ NAVBAR — only when no hero ══ */}
-      {!showHero && (
+      {/* ══ NAVBAR — removed from all pages ══ */}
+      {false && !showHero && (
       <header className="sticky top-0 z-50 w-full" dir="rtl">
         <div className="max-w-7xl mx-auto px-4 pt-3 pb-2">
           <div className="flex items-center gap-3 px-5 py-2.5 justify-between"
@@ -394,13 +394,13 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
         <section className="relative overflow-hidden" dir="rtl">
 
           {/* לוגו ענק מרוכז */}
-          <div className="flex justify-center pt-4 pb-0">
-            <button onClick={onHome} className="flex items-center gap-3 group">
-              <span className="flex h-14 w-14 items-center justify-center rounded-2xl"
-                style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)` }}>
-                <Sparkles className="h-7 w-7 text-white" />
+          <div className="flex justify-center pt-6 pb-0">
+            <button onClick={onHome} className="flex items-center gap-4 group">
+              <span className="flex h-18 w-18 items-center justify-center rounded-3xl"
+                style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)`, width: '72px', height: '72px' }}>
+                <Sparkles className="h-9 w-9 text-white" />
               </span>
-              <span className="text-5xl md:text-6xl font-black group-hover:opacity-90 transition-opacity"
+              <span className="text-6xl md:text-7xl font-black group-hover:opacity-90 transition-opacity"
                 style={{ letterSpacing: '-0.04em', color: C.dark }}>
                 CL<span style={{ color: C.pink }}>I</span>Q
               </span>
