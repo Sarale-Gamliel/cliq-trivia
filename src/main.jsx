@@ -9,7 +9,23 @@ import PlayerApp from './PlayerApp.jsx'
 import { supabase } from './supabaseClient'
 import './index.css'
 
+const DEFAULT_SETTINGS = {
+  timeLimit: 15, autoAdvance: false, autoReveal: true, autoShowWinners: true,
+  autoStartTimer: false, endOnAllVoted: true, eliminationMode: false,
+  teamMode: false, leaderboardMode: 'always', jokerActive: false, maxWrongs: 3,
+};
+
 function DashboardPage({ session, isGuest, sessionChecked, onShowAuth }) {
+  const [settings, setSettings] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('cliq_settings') || 'null') || DEFAULT_SETTINGS; }
+    catch { return DEFAULT_SETTINGS; }
+  });
+
+  const handleSettings = (s) => {
+    setSettings(s);
+    localStorage.setItem('cliq_settings', JSON.stringify(s));
+  };
+
   if (!sessionChecked) return (
     <div className="min-h-screen flex items-center justify-center" style={{ background: '#f0ddd8' }}>
       <div className="text-3xl font-black animate-pulse" style={{ color: '#ef9098', letterSpacing: '-0.05em' }}>
@@ -26,6 +42,8 @@ function DashboardPage({ session, isGuest, sessionChecked, onShowAuth }) {
         onShowAuth={onShowAuth}
         onClose={() => window.location.href = '/'}
         onPlay={() => window.location.href = '/'}
+        settings={settings}
+        onSettingsChange={handleSettings}
       />
       <div className="px-4 md:px-6 lg:px-8 pb-8"><Footer /></div>
     </div>

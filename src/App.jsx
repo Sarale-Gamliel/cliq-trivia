@@ -93,20 +93,20 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
     });
   }, [isGuest, session]);
 
-  const [gameSettings, setGameSettings] = useState({
-    timeLimit: 15,
-    autoAdvance: false,
-    autoReveal: true,
-    leaderboardMode: 'always',
-    autoShowWinners: true,
-    autoStartTimer: true,
-    endOnAllVoted: true,
-    eliminationMode: false,
-    maxWrongs: 3,
-    teamMode: false,
+  const [gameSettings, setGameSettings] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('cliq_settings') || 'null') || {
+      timeLimit: 15, autoAdvance: false, autoReveal: true, leaderboardMode: 'always',
+      autoShowWinners: true, autoStartTimer: true, endOnAllVoted: true,
+      eliminationMode: false, maxWrongs: 3, teamMode: false, jokerActive: false,
+    }; } catch { return {
+      timeLimit: 15, autoAdvance: false, autoReveal: true, leaderboardMode: 'always',
+      autoShowWinners: true, autoStartTimer: true, endOnAllVoted: true,
+      eliminationMode: false, maxWrongs: 3, teamMode: false, jokerActive: false,
+    }; }
   });
   const gameSettingsRef = useRef(null);
   gameSettingsRef.current = gameSettings;
+  useEffect(() => { localStorage.setItem('cliq_settings', JSON.stringify(gameSettings)); }, [gameSettings]);
   const playersRef = useRef(players);
   playersRef.current = players;
 

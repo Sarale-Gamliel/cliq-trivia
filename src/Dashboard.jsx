@@ -42,7 +42,10 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
   const [showNewTopic, setShowNewTopic] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [userForm, setUserForm] = useState({ first_name: initName || '', email: session?.user?.email || '' });
+  const [userForm, setUserForm] = useState({
+    first_name: initName || session?.user?.user_metadata?.first_name || '',
+    email: session?.user?.email || '',
+  });
   const [editingProfile, setEditingProfile] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
 
@@ -212,7 +215,9 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
     );
   }
 
-  const displayName = isLoggedIn ? (userForm.first_name || session?.user?.email?.split('@')[0] || '') : 'אורח';
+  const displayName = isLoggedIn
+    ? (userForm.first_name || session?.user?.user_metadata?.first_name || session?.user?.email?.split('@')[0] || '')
+    : 'אורח';
 
   return (
     <div className="min-h-screen pb-16" style={{ background: C.bg }} dir="rtl">
