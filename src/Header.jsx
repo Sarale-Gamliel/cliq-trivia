@@ -278,9 +278,9 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
   const [mobileOpen, setMobileOpen]   = useState(false);
 
   const navLinks = [
-    { label: 'איך זה עובד',    href: '#steps' },
-    { label: 'סוגי אירועים',   href: '#events' },
-    { label: 'שאלות נפוצות',   href: '#faq' },
+    { label: 'איך זה עובד',  href: '#steps',  icon: '⚡' },
+    { label: 'סוגי אירועים', href: '#events', icon: '🎉' },
+    { label: 'שאלות נפוצות', href: '#faq',    icon: '💬' },
   ];
 
   return (
@@ -314,13 +314,14 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
             </div>
 
             {/* CENTER: Nav links — always visible */}
-            <nav className="hidden md:flex items-center gap-7">
+            <nav className="hidden md:flex items-center gap-2">
               {navLinks.map(link => (
                 <a key={link.href} href={link.href}
-                  className="text-sm font-medium transition-colors hover:opacity-80"
-                  style={{ color: C.mid }}
-                  onMouseEnter={e => e.currentTarget.style.color = C.pink}
-                  onMouseLeave={e => e.currentTarget.style.color = C.mid}>
+                  className="flex items-center gap-1.5 text-sm font-semibold px-4 py-2 rounded-full transition-all hover:scale-[1.04]"
+                  style={{ color: C.mid, background: 'transparent' }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,144,152,0.1)'; e.currentTarget.style.color = C.pink; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = C.mid; }}>
+                  <span>{link.icon}</span>
                   {link.label}
                 </a>
               ))}

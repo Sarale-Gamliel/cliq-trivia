@@ -1987,7 +1987,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
           </section>
 
           {/* ── Event Types ── */}
-          <section className="mt-10">
+          <section className="mt-10" id="events">
             <div className="text-center mb-8">
               <h2 className="text-3xl font-black mb-2" style={{ color: '#1e1535' }}>מתאים לכל אירוע</h2>
               <p style={{ color: '#6b6580' }}>טריוויה חיה שעובדת בכל פורמט ובכל קהל</p>
@@ -2051,7 +2051,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
           </section>
 
           {/* ── FAQ ── */}
-          <section className="mt-10 mb-4">
+          <section className="mt-10 mb-4" id="faq">
             <div className="text-center mb-6">
               <h2 className="text-2xl font-black mb-1" style={{ color: '#1e1535' }}>שאלות נפוצות</h2>
               <p className="text-sm" style={{ color: '#6b6580' }}>כל מה שרצית לדעת על CLIQ</p>
