@@ -1572,24 +1572,20 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                   return (
                     <div
                       key={idx}
-                      className={`relative p-5 rounded-2xl border-2 transition-all backdrop-blur-sm ${
-                        isCorrect
-                          ? 'border-emerald-500 bg-emerald-500/10 shadow-lg shadow-emerald-500/20'
-                          : choosers.length > 0
-                          ? 'border-red-500/50 bg-red-500/10 shadow-lg shadow-red-500/10'
-                          : 'border-white/10 bg-slate-800/30 opacity-60'
-                      }`}
+                      style={{
+                        background: isCorrect ? '#ecfdf5' : choosers.length > 0 ? '#fef2f2' : '#f9f9f9',
+                        border: `2px solid ${isCorrect ? '#10b981' : choosers.length > 0 ? '#ef4444' : '#e5e7eb'}`,
+                        borderRadius: '1rem', padding: '1.25rem', transition: 'all 0.3s',
+                        opacity: choosers.length === 0 && !isCorrect ? 0.7 : 1,
+                      }}
                     >
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
-                          <div className={`h-10 w-10 rounded-xl flex items-center justify-center font-black text-sm font-mono ${
-                            isCorrect
-                              ? 'bg-emerald-500 text-white'
-                              : 'bg-slate-800 text-slate-400'
-                          }`}>
+                          <div className="h-10 w-10 rounded-xl flex items-center justify-center font-black text-sm font-mono"
+                            style={{ background: isCorrect ? '#10b981' : choosers.length > 0 ? '#ef4444' : '#d1d5db', color: '#fff' }}>
                             {idx + 1}
                           </div>
-                          <span className="font-bold text-slate-200">{option}</span>
+                          <span className="font-bold" style={{ color: '#1e1535' }}>{option}</span>
                         </div>
                         {isCorrect && <Check className="h-6 w-6 text-emerald-400 animate-bounce" />}
                       </div>
@@ -1601,8 +1597,8 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                               key={c.id}
                               className={`text-xs px-3 py-1 rounded-full font-medium flex items-center gap-1.5 ${
                                 isCorrect
-                                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/20'
-                                  : 'bg-red-500/20 text-red-300 border border-red-500/20'
+                                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                                  : 'bg-red-100 text-red-800 border border-red-300'
                               }`}
                             >
                               {c.isBot && <Bot className="h-3 w-3" />}
@@ -1632,7 +1628,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                   <div className="mt-5">
                     <div className="flex items-center gap-2 mb-3">
                       <Zap className="h-3.5 w-3.5 text-amber-400" />
-                      <span className="text-xs font-black text-slate-400 uppercase tracking-wider">הסיבוב בספרות</span>
+                      <span className="text-xs font-black uppercase tracking-wider" style={{ color: '#6b6580' }}>הסיבוב בספרות</span>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                       {highlights.map((h, i) => (
