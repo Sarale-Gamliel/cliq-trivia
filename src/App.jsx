@@ -797,6 +797,17 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
       return { name: p.name, delta };
     }).filter(r => r.delta !== 0);
 
+    const S = {
+      emerald: { bg: 'rgba(16,185,129,0.1)',  border: 'rgba(16,185,129,0.3)',  color: '#065f46' },
+      red:     { bg: 'rgba(239,68,68,0.1)',    border: 'rgba(239,68,68,0.3)',   color: '#991b1b' },
+      amber:   { bg: 'rgba(245,158,11,0.1)',   border: 'rgba(245,158,11,0.3)',  color: '#92400e' },
+      rose:    { bg: 'rgba(239,68,68,0.08)',   border: 'rgba(244,63,94,0.3)',   color: '#9f1239' },
+      teal:    { bg: 'rgba(20,184,166,0.1)',   border: 'rgba(20,184,166,0.3)',  color: '#134e4a' },
+      pink:    { bg: 'rgba(236,72,153,0.08)',  border: 'rgba(236,72,153,0.25)', color: '#9d174d' },
+      slate:   { bg: 'rgba(100,116,139,0.1)',  border: 'rgba(100,116,139,0.3)', color: '#1e293b' },
+      cyan:    { bg: 'rgba(6,182,212,0.1)',    border: 'rgba(6,182,212,0.3)',   color: '#164e63' },
+    };
+
     if (rankChanges.length > 0) {
       rankChanges.slice(0, 2).forEach(({ name, delta }) => {
         highlights.push({
@@ -804,92 +815,50 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
           title: delta > 0 ? 'עלה בדירוג' : 'ירד בדירוג',
           value: name,
           sub: delta > 0 ? `עלה ${delta} מקומות ↑` : `ירד ${Math.abs(delta)} מקומות ↓`,
-          c: delta > 0
-            ? 'from-emerald-500/20 to-green-500/20 border-emerald-500/30 text-emerald-700'
-            : 'from-red-500/20 to-rose-500/20 border-red-500/30 text-red-700',
+          s: delta > 0 ? S.emerald : S.red,
         });
       });
     }
 
-    // ⚡ Fastest correct
     if (correct.length > 0) {
       const fastest = correct.reduce((a, b) => a.lastAnswerTime < b.lastAnswerTime ? a : b);
-      highlights.push({
-        icon: '⚡', title: 'המהיר ביותר', value: fastest.name,
-        sub: 'ענה ראשון מבין כל המצליחנים!',
-        c: 'from-amber-500/20 to-yellow-500/20 border-amber-500/30 text-amber-700',
-      });
+      highlights.push({ icon: '⚡', title: 'המהיר ביותר', value: fastest.name, sub: 'ענה ראשון מבין כל המצליחנים!', s: S.amber });
     }
 
-    // 🔥 Most points this round
     if (correct.length > 1) {
       const star = correct.reduce((a, b) => a.pointsGained > b.pointsGained ? a : b);
-      highlights.push({
-        icon: '🔥', title: 'כוכב הסיבוב', value: star.name,
-        sub: `+${star.pointsGained} נק׳ בסיבוב הזה`,
-        c: 'from-rose-500/20 to-orange-500/20 border-rose-500/30 text-rose-700',
-      });
+      highlights.push({ icon: '🔥', title: 'כוכב הסיבוב', value: star.name, sub: `+${star.pointsGained} נק׳ בסיבוב הזה`, s: S.rose });
     }
 
-    // 🐢 Last correct answerer (brave tortoise)
     if (correct.length > 1) {
       const slowest = correct.reduce((a, b) => a.lastAnswerTime > b.lastAnswerTime ? a : b);
-      highlights.push({
-        icon: '🐢', title: 'הנחוש ביותר', value: slowest.name,
-        sub: `חשב לאט, ידע בטח — ${formatResponseTime(slowest.lastAnswerTime)}`,
-        c: 'from-teal-500/20 to-emerald-500/20 border-teal-500/30 text-teal-700',
-      });
+      highlights.push({ icon: '🐢', title: 'הנחוש ביותר', value: slowest.name, sub: `חשב לאט, ידע בטח — ${formatResponseTime(slowest.lastAnswerTime)}`, s: S.teal });
     }
 
-    // 😅 Fastest wrong answer (overconfident)
     if (incorrect.length > 0) {
       const boldWrong = incorrect.reduce((a, b) => a.lastAnswerTime < b.lastAnswerTime ? a : b);
-      highlights.push({
-        icon: '😅', title: 'האמיץ המבולבל', value: boldWrong.name,
-        sub: `ענה ב-${formatResponseTime(boldWrong.lastAnswerTime)} ... אבל טעה`,
-        c: 'from-pink-500/20 to-rose-500/20 border-pink-500/30 text-pink-700',
-      });
+      highlights.push({ icon: '😅', title: 'האמיץ המבולבל', value: boldWrong.name, sub: `ענה ב-${formatResponseTime(boldWrong.lastAnswerTime)} ... אבל טעה`, s: S.pink });
     }
 
-    // 🎯 Most popular wrong answer
     if (incorrect.length > 1) {
       const wrongCounts = {};
       incorrect.forEach(p => { wrongCounts[p.lastAnswer] = (wrongCounts[p.lastAnswer] || 0) + 1; });
       const mostPopularWrong = Object.entries(wrongCounts).sort((a,b) => b[1]-a[1])[0];
       if (mostPopularWrong && mostPopularWrong[1] > 1 && currentQuestion) {
         const optionText = currentQuestion.options[Number(mostPopularWrong[0]) - 1];
-        highlights.push({
-          icon: '🎭', title: 'הפח הכי גדול', value: `תשובה ${mostPopularWrong[0]}`,
-          sub: `"${optionText}" — ${mostPopularWrong[1]} שחקנים נפלו`,
-          c: 'from-slate-500/20 to-slate-600/20 border-slate-500/30 text-slate-700',
-        });
+        highlights.push({ icon: '🎭', title: 'הפח הכי גדול', value: `תשובה ${mostPopularWrong[0]}`, sub: `"${optionText}" — ${mostPopularWrong[1]} שחקנים נפלו`, s: S.slate });
       }
     }
 
-    // 💯 Round accuracy
     if (answered.length > 0) {
       const pct = Math.round((correct.length / answered.length) * 100);
       const emoji = pct === 100 ? '💯' : pct === 0 ? '💀' : pct >= 70 ? '🎉' : pct >= 40 ? '😬' : '🙈';
-      const msg = pct === 100 ? 'כולם ידעו!' : pct === 0 ? 'אף אחד לא ידע!' : `${correct.length} מתוך ${answered.length}`;
-      highlights.push({
-        icon: emoji, title: 'הצלחה בסיבוב', value: `${pct}%`,
-        sub: msg,
-        c: pct >= 70
-          ? 'from-emerald-500/20 to-green-500/20 border-emerald-500/30 text-emerald-700'
-          : pct >= 40
-          ? 'from-amber-500/20 to-yellow-500/20 border-amber-500/30 text-amber-700'
-          : 'from-red-500/20 to-rose-500/20 border-red-500/30 text-red-700',
-      });
+      highlights.push({ icon: emoji, title: 'הצלחה בסיבוב', value: `${pct}%`, sub: pct === 100 ? 'כולם ידעו!' : pct === 0 ? 'אף אחד לא ידע!' : `${correct.length} מתוך ${answered.length}`, s: pct >= 70 ? S.emerald : pct >= 40 ? S.amber : S.red });
     }
 
-    // 🏅 Fastest among all answerers (not just correct)
     if (answered.length > 0 && correct.length === 0) {
       const quickest = answered.reduce((a, b) => a.lastAnswerTime < b.lastAnswerTime ? a : b);
-      highlights.push({
-        icon: '🏅', title: 'האמיץ שבכולם', value: quickest.name,
-        sub: `ניסה הכי מהר — ${formatResponseTime(quickest.lastAnswerTime)}`,
-        c: 'from-cyan-500/20 to-blue-500/20 border-cyan-500/30 text-cyan-700',
-      });
+      highlights.push({ icon: '🏅', title: 'האמיץ שבכולם', value: quickest.name, sub: `ניסה הכי מהר — ${formatResponseTime(quickest.lastAnswerTime)}`, s: S.cyan });
     }
 
     return highlights;
@@ -1350,19 +1319,6 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                         <span className="text-lg font-bold" style={{ color: '#1e1535' }}>{option}</span>
                       </div>
 
-                      {numAnswers > 0 && (
-                        <div className="flex flex-wrap gap-1.5 mt-4 pt-3" style={{ borderTop: `1px solid rgba(239,144,152,0.12)` }}>
-                          {answerers.map(a => (
-                            <span
-                              key={a.id}
-                              className="answer-chip text-xs px-2.5 py-1 rounded-full font-bold"
-                              style={{ background: pal.accent, color: pal.num }}
-                            >
-                              ●
-                            </span>
-                          ))}
-                        </div>
-                      )}
                     </div>
                   );
                 })}
@@ -1575,31 +1531,6 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                         {isCorrect && <Check className="h-6 w-6 text-emerald-400 animate-bounce" />}
                       </div>
 
-                      {choosers.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5 pt-2 border-t border-white/8">
-                          {choosers.map(c => (
-                            <span
-                              key={c.id}
-                              className={`text-xs px-3 py-1 rounded-full font-medium flex items-center gap-1.5 ${
-                                isCorrect
-                                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                                  : 'bg-red-100 text-red-800 border border-red-300'
-                              }`}
-                            >
-                              {c.isBot && <Bot className="h-3 w-3" />}
-                              {c.name}
-                              <span className="text-[10px] opacity-70">({formatResponseTime(c.lastAnswerTime)})</span>
-                              {/* Feature 1: Show streak in reveal */}
-                              {c.streak >= 2 && (
-                                <span className="flex items-center gap-0.5 text-orange-400">
-                                  <Flame className="h-3 w-3" />
-                                  {c.streak}
-                                </span>
-                              )}
-                            </span>
-                          ))}
-                        </div>
-                      )}
                     </div>
                   );
                 })}
@@ -1617,11 +1548,12 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                       {highlights.map((h, i) => (
-                        <div key={i} className={`relative p-3 rounded-xl border bg-gradient-to-br ${h.c} backdrop-blur-sm`}>
+                        <div key={i} className="relative p-3 rounded-xl"
+                          style={{ background: h.s.bg, border: `1px solid ${h.s.border}`, color: h.s.color }}>
                           <div className="flex items-start gap-2.5">
                             <span className="text-xl leading-none shrink-0">{h.icon}</span>
                             <div className="min-w-0">
-                              <div className="text-[9px] font-black uppercase tracking-wider opacity-60 mb-0.5">{h.title}</div>
+                              <div className="text-[9px] font-black uppercase tracking-wider opacity-70 mb-0.5">{h.title}</div>
                               <div className="font-black text-sm truncate leading-tight">{h.value}</div>
                               <div className="text-[10px] opacity-55 leading-tight mt-0.5">{h.sub}</div>
                             </div>
