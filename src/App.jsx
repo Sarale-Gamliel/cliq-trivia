@@ -1828,7 +1828,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                         ? 'border-amber-500/30 shadow-lg shadow-amber-500/5'
                         : 'border-white/6 opacity-70'
                     }`}
-                    style={{ background: 'rgba(255,245,240,0.65)' }}
+                    style={{ background: 'rgba(255,255,255,0.92)', border: '1.5px solid rgba(239,144,152,0.2)' }}
                   >
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2">
@@ -1839,9 +1839,9 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                             ? 'bg-emerald-500 animate-pulse'
                             : isDialing
                             ? 'bg-amber-400 animate-pulse'
-                            : 'bg-slate-600'
+                            : 'bg-slate-400'
                         }`}></span>
-                        <span className="font-extrabold text-sm text-slate-100">{p.name}</span>
+                        <span className="font-extrabold text-sm" style={{ color: '#1e1535' }}>{p.name}</span>
                         <button
                           onClick={() => toggleBotMode(p.id)}
                           className={`text-[9px] px-2 py-0.5 rounded-full font-bold transition ${
@@ -1881,10 +1881,10 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
 
                     <div className="rounded-xl p-3 mb-3 text-center min-h-[60px] flex flex-col justify-center" style={{ background: 'rgba(239,144,152,0.08)', border: '1px solid rgba(239,144,152,0.12)' }}>
                       {!p.isConnected && !isDialing && (
-                        <div className="text-xs" style={{ color: '#a090a0' }}>📴 מנותק</div>
+                        <div className="text-xs font-bold" style={{ color: '#6b6580' }}>📴 מנותק</div>
                       )}
                       {isDialing && (
-                        <div className="text-xs font-bold animate-pulse" style={{ color: '#c08030' }}>📞 מחייג...</div>
+                        <div className="text-xs font-bold animate-pulse" style={{ color: '#b06010' }}>📞 מחייג...</div>
                       )}
                       {p.isConnected && p.isEliminated && (
                         <div className="text-xs text-red-500 font-bold flex items-center justify-center gap-1">
@@ -1902,7 +1902,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                             </div>
                           )}
                           <div className="text-xs font-bold text-emerald-600">📞 בשיחה</div>
-                          <div className="text-xs mt-1" style={{ color: '#8a7890' }}>
+                          <div className="text-xs mt-1 font-medium" style={{ color: '#4a4060' }}>
                             {gameState === 'LOBBY' && '⏳ ממתין למשחק'}
                             {gameState === 'QUESTION' && (
                               hasAnswered
@@ -1931,8 +1931,8 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                             style={isSelected
                               ? { background: '#ef9098', color: '#fff', border: '2px solid #c05070', boxShadow: '0 4px 12px rgba(239,144,152,0.4)' }
                               : disabled
-                              ? { background: 'rgba(239,144,152,0.1)', color: '#c0b0b8', border: '1px solid rgba(239,144,152,0.15)', cursor: 'not-allowed' }
-                              : { background: 'rgba(197,217,210,0.35)', color: '#1e1535', border: '1px solid rgba(197,217,210,0.5)' }
+                              ? { background: 'rgba(200,190,210,0.15)', color: '#9a8aaa', border: '1px solid rgba(200,190,210,0.2)', cursor: 'not-allowed' }
+                              : { background: '#c5d9d2', color: '#1e1535', border: '1px solid #9ec4bb', fontWeight: 900 }
                             }
                           >
                             {num}
