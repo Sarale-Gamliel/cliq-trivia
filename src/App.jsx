@@ -1536,27 +1536,25 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                 })}
               </div>
 
-              {/* ── Round highlights ── */}
+              {/* ── Top 3 correct answerers ── */}
               {(() => {
-                const highlights = getRoundHighlights();
-                if (highlights.length === 0) return null;
+                const medals = ['🥇', '🥈', '🥉'];
+                const correct = players
+                  .filter(p => p.isConnected && p.isCorrect)
+                  .sort((a, b) => a.lastAnswerTime - b.lastAnswerTime)
+                  .slice(0, 3);
+                if (correct.length === 0) return null;
                 return (
                   <div className="mt-5">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Zap className="h-3.5 w-3.5 text-amber-400" />
-                      <span className="text-xs font-black uppercase tracking-wider" style={{ color: '#6b6580' }}>הסיבוב בספרות</span>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                      {highlights.map((h, i) => (
-                        <div key={i} className="relative p-3 rounded-xl"
-                          style={{ background: h.s.bg, border: `1px solid ${h.s.border}`, color: h.s.color }}>
-                          <div className="flex items-start gap-2.5">
-                            <span className="text-xl leading-none shrink-0">{h.icon}</span>
-                            <div className="min-w-0">
-                              <div className="text-[9px] font-black uppercase tracking-wider opacity-70 mb-0.5">{h.title}</div>
-                              <div className="font-black text-sm truncate leading-tight">{h.value}</div>
-                              <div className="text-[10px] opacity-55 leading-tight mt-0.5">{h.sub}</div>
-                            </div>
+                    <div className="text-xs font-black mb-3" style={{ color: '#6b6580' }}>✅ ענו נכון ראשונים</div>
+                    <div className="flex gap-3">
+                      {correct.map((p, i) => (
+                        <div key={p.id} className="flex-1 flex items-center gap-2 px-3 py-2.5 rounded-xl"
+                          style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.25)' }}>
+                          <span className="text-lg shrink-0">{medals[i]}</span>
+                          <div className="min-w-0">
+                            <div className="font-black text-sm truncate" style={{ color: '#065f46' }}>{p.name}</div>
+                            <div className="text-[11px]" style={{ color: '#6b9e8a' }}>{formatResponseTime(p.lastAnswerTime)}</div>
                           </div>
                         </div>
                       ))}
