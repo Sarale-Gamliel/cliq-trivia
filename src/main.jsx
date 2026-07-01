@@ -46,9 +46,7 @@ function Root() {
     return () => subscription.unsubscribe();
   }, []);
 
-  if (loading) {
-    return <div className="min-h-screen" style={{ background: '#f0ddd8' }} />;
-  }
+  if (loading) return null;
 
   return (
     <BrowserRouter>
