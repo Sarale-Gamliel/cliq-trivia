@@ -78,7 +78,9 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
   const [players, setPlayers] = useState(INITIAL_PLAYERS);
   const [userName, setUserName] = useState(isGuest ? 'אורח' : '');
   const [showTopics, setShowTopics] = useState(false);
-  const [showDashboard, setShowDashboard] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(
+    () => !isGuest && !!session && localStorage.getItem('cliq_view') === 'dashboard'
+  );
   const [activeQuestions, setActiveQuestions] = useState(triviaQuestions);
   const [playingTopicName, setPlayingTopicName] = useState('');
 
@@ -952,7 +954,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
   if (showDashboard) {
     return (
       <div className="min-h-screen" style={{ background: '#f0ddd8' }} dir="rtl">
-        <Header userName={userName} onHome={() => setShowDashboard(false)} showHero={false} session={session} isGuest={isGuest} onShowAuth={onShowAuth} onOpenDashboard={() => setShowDashboard(false)} />
+        <Header userName={userName} onHome={() => { setShowDashboard(false); localStorage.removeItem('cliq_view'); }} showHero={false} session={session} isGuest={isGuest} onShowAuth={onShowAuth} onOpenDashboard={() => { setShowDashboard(false); localStorage.removeItem('cliq_view'); }} />
         <Dashboard
           session={session}
           isGuest={isGuest}
@@ -1108,7 +1110,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
       )}
 
       {/* HEADER */}
-      <Header userName={userName} onHome={goHome} showHero={gameState === 'LOBBY'} session={session} isGuest={isGuest} onShowAuth={onShowAuth} onOpenDashboard={() => setShowDashboard(true)} />
+      <Header userName={userName} onHome={goHome} showHero={gameState === 'LOBBY'} session={session} isGuest={isGuest} onShowAuth={onShowAuth} onOpenDashboard={() => { setShowDashboard(true); localStorage.setItem('cliq_view', 'dashboard'); }} />
 
       <div className="p-4 md:p-6 lg:p-8">
       {/* MAIN */}
