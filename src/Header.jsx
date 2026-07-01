@@ -327,7 +327,16 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
             </nav>
 
             {/* LEFT: Actions — flex-1 justify-end mirrors the logo side */}
-            <div className="flex-1 flex items-center justify-end gap-2">
+            <div className="flex-1 flex items-center justify-end gap-2.5">
+
+              {/* CTA — הזמן אירוע */}
+              {showHero && (
+                <a href={`https://wa.me/${WA_NUMBER}`} target="_blank" rel="noopener noreferrer"
+                  className="hidden md:inline-flex items-center gap-1.5 rounded-full text-sm font-black text-white px-4 py-2 transition hover:scale-[1.04]"
+                  style={{ background: 'linear-gradient(135deg, #10b981, #059669)', boxShadow: '0 4px 12px rgba(16,185,129,0.3)' }}>
+                  הזמן אירוע 🎉
+                </a>
+              )}
 
               {/* כניסת מנחה / שם — always one button; hover shows logout when logged in */}
               <div className="relative group/host">
