@@ -1614,7 +1614,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                 <h2 className="text-5xl md:text-6xl font-black bg-gradient-to-r from-amber-400 via-yellow-400 to-orange-400 bg-clip-text text-transparent">
                   🏆 המשחק נגמר!
                 </h2>
-                <p className="text-xl text-slate-300">התוצאות הסופיות של שיחות הטריוויה</p>
+                <p className="text-xl font-bold" style={{ color: '#6b6580' }}>התוצאות הסופיות של שיחות הטריוויה</p>
 
                 {/* Podium */}
                 <div className="flex items-end justify-center gap-4 pt-6">
@@ -1625,7 +1625,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
 
                     return (
                       <div key={p.id} className="flex flex-col items-center gap-2">
-                        <div className="text-sm font-bold text-slate-200">{p.name}</div>
+                        <div className="text-sm font-bold" style={{ color: '#1e1535' }}>{p.name}</div>
                         <div className={`w-24 ${heights[idx]} bg-gradient-to-t ${colors[idx]} rounded-t-2xl flex items-center justify-center shadow-2xl shadow-amber-500/20 relative overflow-hidden`}>
                           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                           <span className="text-4xl">{medals[idx]}</span>
@@ -1666,7 +1666,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                   {rankedPlayers.map((p, idx) => (
                     <div key={p.id} className="flex justify-between items-center py-2 border-b border-white/8 last:border-0">
                       <div className="flex items-center gap-3">
-                        <span className="text-sm font-bold text-slate-500 w-6">#{idx + 1}</span>
+                        <span className="text-sm font-bold w-6" style={{ color: 'rgba(255,255,255,0.7)' }}>#{idx + 1}</span>
                         <span className="font-bold text-slate-200">{p.name}</span>
                         {p.isBot && <Bot className="h-3.5 w-3.5 text-cyan-400" />}
                         {/* Feature 8: Show eliminated badge */}
