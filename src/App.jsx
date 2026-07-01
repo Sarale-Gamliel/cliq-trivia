@@ -1817,18 +1817,16 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                 return (
                   <div
                     key={p.id}
-                    className={`relative border rounded-2xl p-4 transition-all ${
-                      p.isEliminated
-                        ? 'border-red-500/30 opacity-60'
-                        : hasAnswered && gameState === 'QUESTION'
-                        ? 'border-emerald-500/50 shadow-lg shadow-emerald-500/10'
-                        : p.isConnected
-                        ? 'border-teal-400/25 shadow-lg shadow-teal-500/10'
-                        : isDialing
-                        ? 'border-amber-500/30 shadow-lg shadow-amber-500/5'
-                        : 'border-white/6 opacity-70'
-                    }`}
-                    style={{ background: 'rgba(255,255,255,0.92)', border: '1.5px solid rgba(239,144,152,0.2)' }}
+                    className="relative rounded-2xl p-4 transition-all"
+                    style={{
+                      background: '#fff',
+                      border: p.isEliminated ? '2px solid #fca5a5'
+                        : hasAnswered && gameState === 'QUESTION' ? '2px solid #6ee7b7'
+                        : p.isConnected ? '2px solid #5eead4'
+                        : isDialing ? '2px solid #fcd34d'
+                        : '2px solid #f5c5be',
+                      boxShadow: '0 2px 8px rgba(239,144,152,0.12)'
+                    }}
                   >
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2">
@@ -1881,7 +1879,7 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
 
                     <div className="rounded-xl p-3 mb-3 text-center min-h-[60px] flex flex-col justify-center" style={{ background: 'rgba(239,144,152,0.08)', border: '1px solid rgba(239,144,152,0.12)' }}>
                       {!p.isConnected && !isDialing && (
-                        <div className="text-xs font-bold" style={{ color: '#6b6580' }}>📴 מנותק</div>
+                        <div className="text-sm font-bold" style={{ color: '#4a4060' }}>📴 מנותק</div>
                       )}
                       {isDialing && (
                         <div className="text-xs font-bold animate-pulse" style={{ color: '#b06010' }}>📞 מחייג...</div>
