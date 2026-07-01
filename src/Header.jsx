@@ -335,7 +335,7 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
 
               {/* כניסת מנחה */}
               <div className="relative group/host">
-                <button onClick={onOpenDashboard}
+                <button onClick={session && !isGuest ? onOpenDashboard : onShowAuth}
                   className="inline-flex items-center gap-1.5 rounded-full text-sm font-semibold text-white px-5 py-2 transition-transform hover:scale-[1.03]"
                   style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)`, boxShadow: '0 4px 14px rgba(239,144,152,0.3)' }}>
                   <UserCircle className="h-4 w-4" />
@@ -444,7 +444,7 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer pointer-events-none" />
                   <span className="relative">🎉 הזמנת אירוע</span>
                 </button>
-                <button onClick={onOpenDashboard}
+                <button onClick={session && !isGuest ? onOpenDashboard : onShowAuth}
                   className="inline-flex items-center gap-1.5 text-sm font-semibold transition hover:opacity-80"
                   style={{ color: C.mid }}>
                   <UserCircle className="h-4 w-4" />
