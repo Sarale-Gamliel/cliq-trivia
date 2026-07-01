@@ -471,18 +471,18 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                 </button>
                 <button onClick={session && !isGuest ? () => window.location.href = '/dashboard' : onShowAuth}
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-sm font-bold transition hover:scale-[1.02]"
-                  style={{ background: 'rgba(255,255,255,0.85)', color: C.dark, border: `1px solid rgba(239,144,152,0.2)` }}>
+                  style={{ background: 'rgba(255,255,255,0.85)', color: C.dark, border: `1px solid rgba(239,144,152,0.2)`, minWidth: '140px', justifyContent: 'center' }}>
                   {session && !isGuest && userName ? (
                     <>
-                      <span className="h-7 w-7 rounded-full flex items-center justify-center text-white text-xs font-black"
+                      <span className="h-7 w-7 rounded-full flex items-center justify-center text-white text-xs font-black shrink-0"
                         style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)` }}>
                         {userName[0]?.toUpperCase()}
                       </span>
-                      {userName} ←
+                      {userName}
                     </>
                   ) : (
                     <>
-                      <UserCircle className="h-4 w-4" style={{ color: C.pink }} />
+                      <UserCircle className="h-4 w-4 shrink-0" style={{ color: C.pink }} />
                       כניסת מנחה
                     </>
                   )}
