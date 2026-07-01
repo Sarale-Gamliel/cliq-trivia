@@ -72,11 +72,19 @@ function Dashboard({ session, isGuest, onShowAuth, onClose, settings, onSettings
   const addTopic = async () => {
     if (!newTopicName.trim()) return;
     setSaving(true);
-    const { data } = await supabase.from('topics').insert([{ name: newTopicName.trim() }]).select().single();
+    const { data, error } = await supabase
+      .from('topics')
+      .insert([{ name: newTopicName.trim(), user_id: session?.user?.id }])
+      .select()
+      .single();
+    setSaving(false);
+    if (error) {
+      alert('שגיאה ביצירת מאגר: ' + error.message);
+      return;
+    }
     setNewTopicName('');
     setShowNewTopic(false);
     await loadTopics();
-    setSaving(false);
     if (data) setOpenTopic(data);
   };
 
