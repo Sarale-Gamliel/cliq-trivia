@@ -1169,28 +1169,18 @@ function App({ isGuest = false, onExitGuest, session = null, onShowAuth }) {
                   </button>
                 </div>
 
-                {/* QR join panel */}
-                <div className="flex flex-col rounded-2xl overflow-hidden max-w-sm mx-auto"
-                  style={{ border: '1px solid #f5c5be', boxShadow: '0 4px 16px rgba(239,144,152,0.12)' }}>
-                  <div className="flex items-center gap-4 p-4 bg-white">
-                    <div className="shrink-0 p-2 bg-white rounded-xl shadow-md" style={{ border: '1px solid #f5c5be' }}>
-                      <QRCodeSVG
-                        value={`${window.location.origin}/join/${roomCode}`}
-                        size={80}
-                        fgColor="#1e1535"
-                      />
-                    </div>
-                    <div className="text-right">
-                      <div className="text-xs mb-1" style={{ color: '#6b6580' }}>סרקו להצטרפות</div>
-                      <div className="text-2xl font-black tracking-widest font-mono" style={{ color: '#1e1535' }}>{roomCode}</div>
-                      <div className="text-[10px] mt-1" style={{ color: '#b0a8b8' }}>קוד החדר</div>
-                    </div>
+                {/* QR join panel — כרטיס אחד נקי */}
+                <div className="max-w-xs mx-auto text-center bg-white rounded-3xl p-6"
+                  style={{ boxShadow: '0 4px 24px rgba(239,144,152,0.1)' }}>
+                  <div className="flex justify-center mb-4">
+                    <QRCodeSVG
+                      value={`${window.location.origin}/join/${roomCode}`}
+                      size={120}
+                      fgColor="#1e1535"
+                    />
                   </div>
-                  <div className="px-4 py-2.5 flex items-center justify-center gap-2" style={{ background: '#fdf8f6', borderTop: '1px solid #f5c5be' }}>
-                    <Phone className="h-3.5 w-3.5" style={{ color: '#ef9098' }} />
-                    <span className="text-xs" style={{ color: '#6b6580' }}>או חייגו:</span>
-                    <span className="text-sm font-mono font-bold tracking-wide" style={{ color: '#1e1535' }}>{PHONE_NUMBER}</span>
-                  </div>
+                  <div className="text-3xl font-black tracking-widest font-mono mb-1" style={{ color: '#1e1535' }}>{roomCode}</div>
+                  <div className="text-xs mb-3" style={{ color: '#6b6580' }}>סרקו QR או חייגו {PHONE_NUMBER}</div>
                 </div>
 
                 {players.filter(p => p.isConnected).length > 0 && (

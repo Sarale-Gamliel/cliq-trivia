@@ -394,13 +394,13 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
         <section className="relative overflow-hidden" dir="rtl">
 
           {/* לוגו ענק מרוכז */}
-          <div className="flex justify-center pt-3 pb-0">
-            <button onClick={onHome} className="flex items-center gap-4 group">
-              <span className="flex h-20 w-20 items-center justify-center rounded-3xl shadow-xl"
-                style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)`, boxShadow: '0 12px 32px rgba(239,144,152,0.4)' }}>
-                <Sparkles className="h-10 w-10 text-white" />
+          <div className="flex justify-center pt-4 pb-0">
+            <button onClick={onHome} className="flex items-center gap-3 group">
+              <span className="flex h-14 w-14 items-center justify-center rounded-2xl"
+                style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)` }}>
+                <Sparkles className="h-7 w-7 text-white" />
               </span>
-              <span className="text-6xl md:text-7xl font-black group-hover:opacity-90 transition-opacity"
+              <span className="text-5xl md:text-6xl font-black group-hover:opacity-90 transition-opacity"
                 style={{ letterSpacing: '-0.04em', color: C.dark }}>
                 CL<span style={{ color: C.pink }}>I</span>Q
               </span>
@@ -416,47 +416,44 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
           <div className="mx-auto grid max-w-7xl items-center gap-6 px-4 py-2 md:py-3 lg:grid-cols-2">
 
             {/* RIGHT: copy */}
-            <div className="text-center lg:text-right space-y-5 lg:pr-24">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold mb-4"
-                style={{ background: 'rgba(124,58,237,0.08)', color: '#7c3aed', border: '1px solid rgba(124,58,237,0.2)' }}>
-                ✨ טריוויה חיה לאירועים
-              </div>
-              <h1 className="text-5xl font-black leading-tight tracking-tight md:text-6xl" style={{ color: C.dark, letterSpacing: '-0.02em' }}>
+            <div className="text-center lg:text-right space-y-4 lg:pr-16">
+              <h1 className="text-4xl font-black leading-tight tracking-tight md:text-5xl" style={{ color: C.dark, letterSpacing: '-0.02em' }}>
                 הופכים כל אירוע
                 <br />
                 <span style={{ color: C.pink }}>לחוויה אינטראקטיבית</span>
               </h1>
 
-              <p className="mx-auto max-w-md text-lg leading-relaxed lg:mx-0" style={{ color: C.mid }}>
-                יוצרים שעשועון חי, הקהל מצטרף מהטלפון — ועונה בזמן אמת. ללא התקנות, ללא סיבוך.
+              <p className="text-base leading-relaxed lg:mx-0" style={{ color: C.mid }}>
+                יוצרים שעשועון חי, הקהל מצטרף מהטלפון ועונה בזמן אמת.
               </p>
 
-              <div className="flex flex-wrap gap-2 justify-center lg:justify-end text-sm">
-                {['★★★★★', 'מאות משתתפים', 'כל גיל', 'כל אירוע'].map((t, i) => (
-                  <span key={i} className="px-3 py-1 rounded-full font-medium"
-                    style={{ background: i === 0 ? '#fef3c7' : 'rgba(255,255,255,0.8)', color: i === 0 ? '#92400e' : C.mid, border: '1px solid rgba(239,144,152,0.2)' }}>
-                    {t}
+              {/* פס אמון */}
+              <div className="flex flex-wrap gap-x-4 gap-y-1 justify-center lg:justify-start text-sm font-medium" style={{ color: C.mid }}>
+                {['ללא אפליקציה', 'התחברות בחיוג', 'עד 500 משתתפים', 'בזמן אמת'].map((t, i) => (
+                  <span key={i} className="flex items-center gap-1">
+                    <span style={{ color: '#10b981' }}>✅</span> {t}
                   </span>
                 ))}
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3 lg:justify-start justify-center">
+              {/* כפתור ראשי אחד + משני קטן */}
+              <div className="flex flex-col sm:flex-row items-center gap-3 lg:justify-start justify-center">
                 <button onClick={() => setShowBooking(true)}
-                  className="relative overflow-hidden inline-flex items-center gap-2 rounded-2xl font-black px-8 py-4 text-white justify-center transition-transform hover:scale-[1.03]"
-                  style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)`, boxShadow: '0 12px 28px rgba(239,144,152,0.35)', fontSize: '1.05rem' }}>
+                  className="relative overflow-hidden inline-flex items-center gap-2 rounded-2xl font-black px-8 py-4 text-white transition-transform hover:scale-[1.03]"
+                  style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)`, boxShadow: '0 8px 24px rgba(239,144,152,0.35)', fontSize: '1.05rem' }}>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer pointer-events-none" />
-                  <span className="relative text-xl">🎉</span>
-                  <span className="relative">הזמנת אירוע</span>
+                  <span className="relative">🎉 הזמנת אירוע</span>
                 </button>
                 <button onClick={onOpenDashboard}
-                  className="inline-flex items-center gap-2 rounded-2xl font-black px-8 py-4 text-white justify-center transition-transform hover:scale-[1.03]"
-                  style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)`, boxShadow: '0 12px 28px rgba(239,144,152,0.3)', fontSize: '1.05rem' }}>
-                  <UserCircle className="h-5 w-5" />
-                  {session && !isGuest && userName ? `כניסה — ${userName}` : 'התחברות לחשבון'}
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold transition hover:opacity-80"
+                  style={{ color: C.mid }}>
+                  <UserCircle className="h-4 w-4" />
+                  {session && !isGuest && userName ? userName : 'כניסת מנחה'}
                 </button>
               </div>
+
               <button onClick={() => setShowDemo(true)}
-                className="inline-flex items-center gap-2 text-sm font-semibold justify-center lg:justify-start transition hover:opacity-80"
+                className="text-sm font-semibold transition hover:opacity-80 block"
                 style={{ color: '#7c3aed' }}>
                 🎮 נסה עכשיו בחינם ←
               </button>
