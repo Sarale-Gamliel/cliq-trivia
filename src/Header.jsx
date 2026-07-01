@@ -288,11 +288,11 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
       {showBooking && <BookingModal onClose={() => setShowBooking(false)} />}
       {showDemo && <DemoModal onClose={() => setShowDemo(false)} />}
 
-      {/* ══ NAVBAR — floating pill (zip design) ══ */}
-      <header className="sticky top-0 z-50 w-full" dir="rtl">
+      {/* ══ NAVBAR ══ */}
+      <header className={showHero ? 'w-full' : 'sticky top-0 z-50 w-full'} dir="rtl">
         <div className="max-w-7xl mx-auto px-4 pt-3 pb-2">
-          <div className="flex items-center justify-between gap-3 px-5 py-2.5"
-            style={{
+          <div className={`flex items-center gap-3 px-5 py-2.5 ${showHero ? 'justify-center' : 'justify-between'}`}
+            style={showHero ? {} : {
               borderRadius: '9999px',
               border: '1px solid rgba(239,144,152,0.25)',
               background: 'rgba(255,255,255,0.92)',
@@ -300,43 +300,39 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
               boxShadow: '0 2px 16px rgba(239,144,152,0.12)',
             }}>
 
-            {/* RIGHT: Logo */}
-            <button onClick={onHome} className="flex items-center gap-2 group shrink-0">
-              <span className="flex h-8 w-8 items-center justify-center rounded-xl shadow-sm"
+            {/* Logo — גדול במצב Hero, קטן אחרת */}
+            <button onClick={onHome} className="flex items-center gap-2.5 group shrink-0">
+              <span className={`flex items-center justify-center rounded-2xl shadow-md ${showHero ? 'h-12 w-12' : 'h-8 w-8'}`}
                 style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)` }}>
-                <Sparkles className="h-4 w-4 text-white" />
+                <Sparkles className={`text-white ${showHero ? 'h-6 w-6' : 'h-4 w-4'}`} />
               </span>
-              <span className="text-xl font-black group-hover:opacity-80 transition-opacity" style={{ letterSpacing: '-0.05em', color: C.dark }}>
+              <span className={`font-black group-hover:opacity-80 transition-opacity ${showHero ? 'text-3xl' : 'text-xl'}`}
+                style={{ letterSpacing: '-0.05em', color: C.dark }}>
                 CL<span style={{ color: C.pink }}>I</span>Q
               </span>
             </button>
 
-            {/* CENTER: Nav links */}
-            <nav className="hidden md:flex items-center gap-1">
-              {navLinks.map(link => (
-                <a key={link.href} href={link.href}
-                  className="flex items-center gap-1.5 text-sm font-semibold px-3 py-1.5 rounded-full transition-all"
-                  style={{ color: C.mid }}
-                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,144,152,0.12)'; e.currentTarget.style.color = C.pink; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = C.mid; }}>
-                  <span className="text-base">{link.icon}</span>
-                  {link.label}
-                </a>
-              ))}
-            </nav>
+            {/* Nav links — רק כשאין Hero */}
+            {!showHero && (
+              <nav className="hidden md:flex items-center gap-1">
+                {navLinks.map(link => (
+                  <a key={link.href} href={link.href}
+                    className="flex items-center gap-1.5 text-sm font-semibold px-3 py-1.5 rounded-full transition-all"
+                    style={{ color: C.mid }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,144,152,0.12)'; e.currentTarget.style.color = C.pink; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = C.mid; }}>
+                    <span className="text-base">{link.icon}</span>
+                    {link.label}
+                  </a>
+                ))}
+              </nav>
+            )}
 
-            {/* LEFT: Actions */}
-            <div className="flex items-center gap-2 shrink-0">
-              {/* CTA */}
-              {showHero && (
-                <a href={`https://wa.me/${WA_NUMBER}`} target="_blank" rel="noopener noreferrer"
-                  className="hidden md:inline-flex items-center gap-1.5 rounded-full text-sm font-black text-white px-4 py-2 transition hover:scale-[1.04]"
-                  style={{ background: 'linear-gradient(135deg, #10b981, #059669)', boxShadow: '0 3px 10px rgba(16,185,129,0.3)' }}>
-                  הזמן אירוע 🎉
-                </a>
-              )}
+            {/* Actions — רק כשאין Hero */}
+            {!showHero && (
+              <div className="flex items-center gap-2 shrink-0">
 
-              {/* כניסת מנחה / שם — always one button; hover shows logout when logged in */}
+              {/* כניסת מנחה */}
               <div className="relative group/host">
                 <button onClick={onOpenDashboard}
                   className="inline-flex items-center gap-1.5 rounded-full text-sm font-semibold text-white px-5 py-2 transition-transform hover:scale-[1.03]"
@@ -344,7 +340,6 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                   <UserCircle className="h-4 w-4" />
                   {session && !isGuest && userName ? userName : 'כניסת מנחה'}
                 </button>
-
                 {session && !isGuest && (
                   <div className="absolute top-full mt-2 left-0 bg-white border rounded-2xl overflow-hidden opacity-0 group-hover/host:opacity-100 pointer-events-none group-hover/host:pointer-events-auto transition-all z-50 min-w-[180px] shadow-xl"
                     style={{ borderColor: '#f0ebe8', boxShadow: '0 16px 40px rgba(239,144,152,0.18)' }}>
@@ -363,16 +358,8 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                   </div>
                 )}
               </div>
-
-              {/* Mobile menu toggle (landing) */}
-              {showHero && (
-                <button onClick={() => setMobileOpen(v => !v)}
-                  className="flex h-10 w-10 items-center justify-center rounded-full md:hidden transition"
-                  style={{ color: C.pink }}>
-                  {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-                </button>
-              )}
             </div>
+            )}
           </div>
 
           {/* Mobile dropdown */}
@@ -437,24 +424,25 @@ function Header({ userName, onHome, showHero = false, session, isGuest, onShowAu
                 ))}
               </div>
 
-              <div className="flex flex-col items-center gap-3 sm:flex-row lg:justify-start justify-center">
+              <div className="flex flex-col sm:flex-row gap-3 lg:justify-start justify-center">
                 <a href={`https://wa.me/${WA_NUMBER}`} target="_blank" rel="noopener noreferrer"
-                  className="relative overflow-hidden inline-flex items-center gap-2 rounded-full font-black px-7 py-4 text-white w-full sm:w-auto justify-center transition-transform hover:scale-[1.03]"
-                  style={{ background: 'linear-gradient(135deg, #10b981, #059669)', boxShadow: '0 12px 28px rgba(16,185,129,0.3)' }}>
+                  className="relative overflow-hidden inline-flex items-center gap-2 rounded-2xl font-black px-8 py-4 text-white justify-center transition-transform hover:scale-[1.03]"
+                  style={{ background: 'linear-gradient(135deg, #10b981, #059669)', boxShadow: '0 12px 28px rgba(16,185,129,0.3)', fontSize: '1.05rem' }}>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer pointer-events-none" />
-                  <span className="relative text-xl leading-none">💬</span>
-                  <span className="relative">לפרטים ב-WhatsApp</span>
+                  <span className="relative text-xl leading-none">🛒</span>
+                  <span className="relative">תמחור ותוכניות</span>
                 </a>
-                <button onClick={() => setShowBooking(true)}
-                  className="inline-flex items-center gap-2 rounded-full border px-7 py-4 text-base font-semibold w-full sm:w-auto justify-center transition-colors hover:opacity-80"
-                  style={{ borderColor: 'rgba(239,144,152,0.3)', background: 'rgba(255,255,255,0.8)', color: C.pink }}>
-                  הזמן אירוע
+                <button onClick={onOpenDashboard}
+                  className="inline-flex items-center gap-2 rounded-2xl font-black px-8 py-4 text-white justify-center transition-transform hover:scale-[1.03]"
+                  style={{ background: `linear-gradient(135deg, ${C.pink}, #c05070)`, boxShadow: '0 12px 28px rgba(239,144,152,0.3)', fontSize: '1.05rem' }}>
+                  <UserCircle className="h-5 w-5" />
+                  {session && !isGuest && userName ? `כניסה — ${userName}` : 'התחברות לחשבון'}
                 </button>
-                <button onClick={() => setShowDemo(true)}
-                  className="inline-flex items-center gap-2 rounded-full px-7 py-4 text-base font-semibold w-full sm:w-auto justify-center transition hover:opacity-90"
-                  style={{ background: 'rgba(124,58,237,0.1)', color: '#7c3aed', border: '1px solid rgba(124,58,237,0.2)' }}>
-                  🎮 נסה עכשיו
-                </button>
+              </div>
+              <button onClick={() => setShowDemo(true)}
+                className="inline-flex items-center gap-2 text-sm font-semibold justify-center lg:justify-start transition hover:opacity-80"
+                style={{ color: '#7c3aed' }}>
+                🎮 נסה עכשיו בחינם ←
               </div>
 
               <div className="flex flex-wrap justify-center lg:justify-start gap-2">
